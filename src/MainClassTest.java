@@ -16,4 +16,16 @@ public class MainClassTest {
         }
         Assert.assertTrue(main.getClassNumber()>=45);
     }
+    @Test
+    public void testGetClassString(){
+       String phrase = main.getClassString();
+       if (phrase.contains("Hello")){
+           return;
+       } else if (phrase.contains("hello")){
+           return;
+       }
+       System.out.println("Phrase not contain Hello");
+       Assert.fail();
+       return;
+    }
 }
