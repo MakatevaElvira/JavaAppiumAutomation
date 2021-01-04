@@ -13,3 +13,9 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 *.class
+libs/java-client-7.4.1.jar
+.idea/libraries/java_client_7_4_1.xml
+*.class
+*.jar
+*.xml
+*.class
