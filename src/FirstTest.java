@@ -262,6 +262,21 @@ public class FirstTest {
         Assert.assertEquals(beforeRotationTitle,afterRotationTitle);
     }
     @Test
+    public void assertTitleTest(){
+        String toFind = "Appium";
+        //пропустить
+        waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        //кликнуть поиск
+        waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();
+        //в нов поле ввода ввести Значение
+        waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
+        //открыть статью
+        waitElementPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+        //проверить заголовок
+        assertElementPresent(By.xpath("//android.view.View[@text='"+toFind+"')]"));
+
+    }
+    @Test
     public void backGroundTest(){
         String toFind = "mandarin";
         //пропустить
@@ -282,8 +297,9 @@ public class FirstTest {
         return webDriverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
 
     }
-    public Boolean waitElementIsPresentBy(By locator){
-        WebDriverWait webDriverWait = new WebDriverWait(driver,10);
+
+    public Boolean assertElementPresent(By locator){
+        WebDriverWait webDriverWait = new WebDriverWait(driver,0);
         webDriverWait.withMessage("No element present by locator: "+ locator);
         return webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
 
