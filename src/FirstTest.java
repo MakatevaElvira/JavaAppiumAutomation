@@ -273,7 +273,7 @@ public class FirstTest {
         //открыть статью
         waitElementPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
         //проверить заголовок
-        assertElementPresent(By.xpath("//android.view.View[@text='"+toFind+"')]"));
+        Assert.assertTrue(assertElementPresent(By.xpath("//android.view.View[@text='"+toFind+"')]")));
 
     }
     @Test
@@ -301,7 +301,11 @@ public class FirstTest {
     public Boolean assertElementPresent(By locator){
         WebDriverWait webDriverWait = new WebDriverWait(driver,0);
         webDriverWait.withMessage("No element present by locator: "+ locator);
-        return webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+        List<WebElement> elements= webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        if (elements.size()>0){
+            return true;
+        }
+        return false;
 
     }
     public List <WebElement> waitElementsPresentBy(By locator){
