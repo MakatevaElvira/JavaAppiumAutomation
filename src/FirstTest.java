@@ -34,13 +34,13 @@ public class FirstTest {
         capabilities.setCapability("appActivity","org.wikipedia.main.MainActivity");
         capabilities.setCapability("app","C:\\Users\\79061\\Documents" +
                 "\\GitHub\\javaMobile\\apks\\org.wikipedia.beta_50337_apps.evozi.com.apk");
+        capabilities.setCapability("orientation", "PORTRAIT");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
 
     @After
     public void tearDown(){
-        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
@@ -238,7 +238,7 @@ public class FirstTest {
         Assert.assertTrue(waitElementNotPresentBy(articleLocation2));
         Assert.assertTrue(driver.findElement(articleLocation1).getText().equals(toFind1));
         driver.findElement(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
-        String afterSwipeTitle = driver.findElement(By.xpath("//android.view.View[@text='"+toFind1+"']")).getText();
+        String afterSwipeTitle = waitElementPresentBy(By.xpath("//android.view.View[@text='"+toFind1+"']")).getText();
         Assert.assertEquals(toFind1,afterSwipeTitle);
     }
 
