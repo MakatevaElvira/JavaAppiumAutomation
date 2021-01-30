@@ -1,12 +1,10 @@
+import lib.CoreTestCase;
 import org.junit.Test;
 
 public class MainTest extends CoreTestCase {
     MathHelper mathHelper = new MathHelper();
     int a;
-    public void startTestMessage(){
-        super.startTestMessage();
-        System.out.println("Tests class name = MaimTest");
-    }
+
     @Test()
     public void myFirstTest(){
         System.out.println("Hello QA!!!");
@@ -34,5 +32,15 @@ public class MainTest extends CoreTestCase {
         MathHelper math = new MathHelper();
         System.out.println("Second: Before changing SimpleInt= "+ math.simpleInt);
         math.simpleInt = 8;
+    }
+    public int multiply(int number){
+        return number * 2;
+    }
+    public int multiply(int number,int multiply){
+        return number * multiply;
+    }
+
+    public void startTestMessage(){
+        System.out.println("Start test!");
     }
 }
