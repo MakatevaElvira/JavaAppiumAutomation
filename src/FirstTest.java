@@ -1,4 +1,5 @@
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Assert;
@@ -14,55 +15,59 @@ import static java.time.Duration.ofMillis;
 public class FirstTest extends CoreTestCase {
     private MainPageObject MainPageObject;
     public SearchPageObject SearchPageObject;
+    public ArticlePageObject ArticlePageObject;
 
     protected void setUp() throws Exception {
-     super.setUp();
-     MainPageObject = new MainPageObject(driver);
-     SearchPageObject  = new SearchPageObject(driver);
+        super.setUp();
+        MainPageObject = new MainPageObject(driver);
+        SearchPageObject = new SearchPageObject(driver);
+        ArticlePageObject = new ArticlePageObject(driver);
     }
 
-   @Test
-    public void testFirstSearch(){
-       System.out.println("Java+Appium=start test!!!");
-       MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
-       String searchText = MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'Search Wikipedia')]")).getText();
-       System.out.println(searchText);
-       //waitElementPresentBy(By.xpath("//android.widget.HorizontalScrollView[@content-desc=\"Page 1 of 4\"]/android.widget.LinearLayout/android.widget.LinearLayout[4]")).click();
-       //waitElementPresentBy(By.id("org.wikipedia.beta:id/bottomOffset")).click();
-      System.out.println("Java+Appium=finish test!!!");
-    }
     @Test
-    public void testOfElementsTextAssertion(){
+    public void testFirstSearch() {
+        System.out.println("Java+Appium=start test!!!");
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
-       Boolean result =  MainPageObject.assertElementHasText(By.xpath("//*[contains(@text,'Search Wikipedia')]"), "Search Wikipedia",
-                "Elements text is not = Search Wikipedia");
-        System.out.println("result= "+result);
-       Assert.assertTrue(result);
+        String searchText = MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'Search Wikipedia')]")).getText();
+        System.out.println(searchText);
+        //waitElementPresentBy(By.xpath("//android.widget.HorizontalScrollView[@content-desc=\"Page 1 of 4\"]/android.widget.LinearLayout/android.widget.LinearLayout[4]")).click();
+        //waitElementPresentBy(By.id("org.wikipedia.beta:id/bottomOffset")).click();
+        System.out.println("Java+Appium=finish test!!!");
     }
+
     @Test
-    public void testOfSearchCancellation(){
+    public void testOfElementsTextAssertion() {
+        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        Boolean result = MainPageObject.assertElementHasText(By.xpath("//*[contains(@text,'Search Wikipedia')]"), "Search Wikipedia",
+                "Elements text is not = Search Wikipedia");
+        System.out.println("result= " + result);
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    public void testOfSearchCancellation() {
         String toFind = "google";
         //пропустить
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
         //кликнуть поиск
-       // MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
+        // MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
-       // MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
+        // MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
         SearchPageObject.typeSearchValue(toFind);
         // проверить в результате есть записи
         //MainPageObject.waitElementsPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title"));
         SearchPageObject.waitSearchResult();
         // нажать крестик-очистить поиск
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_close_btn")).click();
-        // проверить результат = пустой поиск=тоже работает
-        //waitElementPresentBy(By.id("org.wikipedia.beta:id/search_empty_image"));
+        SearchPageObject.tabCancelSearchButton();
+        // проверить результат = пустой поиск=тоже работает waitElementPresentBy(By.id("org.wikipedia.beta:id/search_empty_image"));
         // либо нотпрезент
-        Assert.assertTrue(MainPageObject.waitElementNotPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")));
+        Assert.assertTrue(SearchPageObject.waitSearchResultNotPresent());
 
     }
+
     @Test
-    public void testSearchResultChecking(){
+    public void testSearchResultChecking() {
         String toFind = "Google";
         //пропустить
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
@@ -70,15 +75,16 @@ public class FirstTest extends CoreTestCase {
         //MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
-       // MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
+        // MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
         SearchPageObject.typeSearchValue(toFind);
         // проверить результата assert
-        List <WebElement> results = driver.findElements(By.id("org.wikipedia.beta:id/page_list_item_title"));
-        for ( WebElement result: results){
-            System.out.println("Result= "+ result.getText());
+        List<WebElement> results = driver.findElements(By.id("org.wikipedia.beta:id/page_list_item_title"));
+        for (WebElement result : results) {
+            System.out.println("Result= " + result.getText());
             Assert.assertTrue(result.getText().contains(toFind));
         }
     }
+
     @Test
     public void testSwiping() throws InterruptedException {
         String toFind = "Google";
@@ -89,40 +95,38 @@ public class FirstTest extends CoreTestCase {
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+        SearchPageObject.openFirstArticle();
         //свайпнуть
         MainPageObject.swipeUp(2000);
         MainPageObject.swipeUp(2000);
         MainPageObject.swipeUp(2000);
     }
+
     @Test
     public void testBeforeElementSwiping() throws InterruptedException {
         String toFind = "Appium";
         //пропустить
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
-        //кликнуть поиск
-        //waitElementPresentBy(By.xpath("//*[contains(@text,'Search Wikipedia')]")).click();//@class android.widget.TextView
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
-        //(By.id("//org.wikipedia.beta:id/search_container")).click();//
+        SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
+        SearchPageObject.typeSearchValue(toFind);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.xpath("//*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Appium']")).click();
+        SearchPageObject.openFirstArticle();
         //свайпнуть
-        MainPageObject.swipeUpToFindElement(By.xpath("//*[@text='View article in browser']"),10);
+        MainPageObject.swipeUp(10);
     }
 
     @Test
     public void testBigUserTask() throws InterruptedException {
         String toFind = "Appium";
         //пропустить
-        MainPageObject. waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.xpath("//*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Appium']")).click();
+        SearchPageObject.openArticleByTitle(toFind);
         //нажать три точки =не надо org.wikipedia.beta:id/article_menu_bookmark
         //waitElementPresentBy(By.xpath("//android.widget.ImageView[@content-desc=\"More options\"]")).click();
         //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
@@ -143,10 +147,11 @@ public class FirstTest extends CoreTestCase {
         By articleLocation = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Appium']");
         MainPageObject.waitElementPresentBy(articleLocation);
         //свайпнуть и удалить
-        MainPageObject.swipeUpElementToLeft(articleLocation,200);
+        MainPageObject.swipeUpElementToLeft(articleLocation, 200);
         // проверить что статья удалилась, неотображается
         Assert.assertTrue(MainPageObject.waitElementNotPresentBy(articleLocation));
     }
+
     @Test
     public void testTwoArticleSaving() throws InterruptedException {
         String toFind1 = "Appium";
@@ -158,7 +163,7 @@ public class FirstTest extends CoreTestCase {
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind1);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.xpath("//*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='"+toFind1+"']")).click();
+        SearchPageObject.openArticleByTitle(toFind1);
         //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
         MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/article_menu_bookmark")).click();
         //нажать ADD TO LIST
@@ -171,7 +176,7 @@ public class FirstTest extends CoreTestCase {
         MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).clear();
         SearchPageObject.typeSearchValue(toFind2);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.xpath("//*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='"+toFind2+"']")).click();
+        SearchPageObject.openArticleByTitle(toFind1);
         //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
         MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/article_menu_bookmark")).click();
         //нажать ADD TO LIST
@@ -187,22 +192,22 @@ public class FirstTest extends CoreTestCase {
         //Открыть Сохраненные
         MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Saved')]")).click();
         //проверить наличие статьи id=
-        By articleLocation1 = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='"+toFind1+"']");
-        By articleLocation2 = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='"+toFind2+"']");
+        By articleLocation1 = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + toFind1 + "']");
+        By articleLocation2 = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + toFind2 + "']");
         MainPageObject.waitElementPresentBy(articleLocation1);
         MainPageObject.waitElementPresentBy(articleLocation2);
         //свайпнуть и удалить
-        MainPageObject.swipeUpElementToLeft(articleLocation2,200);
+        MainPageObject.swipeUpElementToLeft(articleLocation2, 200);
         // проверить что статья удалилась, неотображается
         Assert.assertTrue(MainPageObject.waitElementNotPresentBy(articleLocation2));
         Assert.assertTrue(driver.findElement(articleLocation1).getText().equals(toFind1));
         driver.findElement(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
-        String afterSwipeTitle = MainPageObject.waitElementPresentBy(By.xpath("//android.view.View[@text='"+toFind1+"']")).getText();
-        Assert.assertEquals(toFind1,afterSwipeTitle);
+        String afterSwipeTitle = ArticlePageObject.getArticleTitle(toFind1);
+        Assert.assertEquals(toFind1, afterSwipeTitle);
     }
 
     @Test
-    public void testRotation(){
+    public void testRotation() {
         String toFind = "How deep is your love";
         //пропустить
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
@@ -211,16 +216,17 @@ public class FirstTest extends CoreTestCase {
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+        SearchPageObject.openFirstArticle();
         //проверить заголовок
         By titleLocator = By.xpath("//android.view.View");
-        String beforeRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator,"text");
+        String beforeRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
         driver.rotate(ScreenOrientation.LANDSCAPE);
-        String afterRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator,"text");
-        Assert.assertEquals(beforeRotationTitle,afterRotationTitle);
+        String afterRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
+        Assert.assertEquals(beforeRotationTitle, afterRotationTitle);
     }
+
     @Test
-    public void testTitleAssertion(){
+    public void testTitleAssertion() {
         String toFind = "Appium";
         //пропустить
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
@@ -229,13 +235,15 @@ public class FirstTest extends CoreTestCase {
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
         //открыть статью
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+        SearchPageObject.openFirstArticle();
         //проверить заголовок
-        Assert.assertTrue(MainPageObject.assertElementPresent(By.xpath("//android.view.View[@text='"+toFind+"')]")));
+        //Assert.assertTrue(MainPageObject.assertElementPresent(By.xpath("//android.view.View[@text='" + toFind + "')]")));
+        Assert.assertEquals(ArticlePageObject.getArticleTitle(toFind),toFind);
 
     }
+
     @Test
-    public void backGroundTest(){
+    public void testOfBackGround() {
         String toFind = "mandarin";
         //пропустить
         MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
