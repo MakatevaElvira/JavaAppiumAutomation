@@ -19,6 +19,9 @@ public class MainPageObject {
     public MainPageObject(AppiumDriver driver){
         this.driver=driver;
     }
+    private static final String
+            MY_LIST = "//android.widget.FrameLayout[@content-desc=\"My lists\"]";
+
     public WebElement waitElementPresentBy(By locator){
         WebDriverWait webDriverWait = new WebDriverWait(driver,5);
         webDriverWait.withMessage("No element present by locator: "+ locator);
@@ -100,5 +103,8 @@ public class MainPageObject {
     public String findElementAndGetAttribute( By locator, String attribute){
         return waitElementPresentBy(locator).getAttribute(attribute);
 
+    }
+    public void openMyList(){
+        waitElementPresentBy(By.xpath(MY_LIST)).click();
     }
 }

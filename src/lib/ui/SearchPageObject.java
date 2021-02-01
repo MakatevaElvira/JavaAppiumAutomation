@@ -13,7 +13,9 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INPUT = "org.wikipedia.beta:id/search_src_text",
             SEARCH_RESULT = "org.wikipedia.beta:id/page_list_item_title",
             SEARCH_RESULT_BY_TPL = "//*[@text='{SUBSTRING}']",
-            SEARCH_CANCEL_BUTTON = "org.wikipedia.beta:id/search_close_btn";
+            SEARCH_CANCEL_BUTTON = "org.wikipedia.beta:id/search_close_btn",
+            FIRST_ARTICLE_TITLE = "org.wikipedia.beta:id/page_list_item_title",
+            RETURN_TO_MAIN = "//android.widget.ImageButton";
 
     //
     public void initSearchInput() {
@@ -27,6 +29,7 @@ public class SearchPageObject extends MainPageObject {
     public void waitSearchResult() {
         waitElementPresentBy(By.id(SEARCH_RESULT));
     }
+
     public Boolean waitSearchResultNotPresent() {
         return waitElementNotPresentBy(By.id(SEARCH_RESULT));
     }
@@ -34,11 +37,17 @@ public class SearchPageObject extends MainPageObject {
     public void tabCancelSearchButton() {
         waitElementPresentBy(By.id(SEARCH_CANCEL_BUTTON)).click();
     }
-    public void openArticleByTitle(String titel){
-        waitElementPresentBy(By.xpath("//*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='"+titel+"']")).click();
+
+    public void openArticleByTitle(String titel) {
+        waitElementPresentBy(By.xpath("//*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + titel + "']")).click();
     }
-    public void openFirstArticle(){
-        waitElementPresentBy(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+
+    public void openFirstArticle() {
+        waitElementPresentBy(By.id(FIRST_ARTICLE_TITLE)).click();
+    }
+
+    public void returnToMainPage() {
+        waitElementPresentBy(By.xpath(RETURN_TO_MAIN)).click();
     }
 
 

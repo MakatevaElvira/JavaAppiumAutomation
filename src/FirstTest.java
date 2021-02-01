@@ -1,6 +1,7 @@
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
+import lib.ui.MyListPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,12 +17,14 @@ public class FirstTest extends CoreTestCase {
     private MainPageObject MainPageObject;
     public SearchPageObject SearchPageObject;
     public ArticlePageObject ArticlePageObject;
+    public MyListPageObject MyListPageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
         MainPageObject = new MainPageObject(driver);
         SearchPageObject = new SearchPageObject(driver);
         ArticlePageObject = new ArticlePageObject(driver);
+        MyListPageObject = new MyListPageObject(driver);
     }
 
     @Test
@@ -97,9 +100,9 @@ public class FirstTest extends CoreTestCase {
         //открыть статью
         SearchPageObject.openFirstArticle();
         //свайпнуть
-        MainPageObject.swipeUp(2000);
-        MainPageObject.swipeUp(2000);
-        MainPageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
     }
 
     @Test
@@ -113,7 +116,7 @@ public class FirstTest extends CoreTestCase {
         //открыть статью
         SearchPageObject.openFirstArticle();
         //свайпнуть
-        MainPageObject.swipeUp(10);
+        ArticlePageObject.swipeToViewElement(10);
     }
 
     @Test
@@ -127,29 +130,28 @@ public class FirstTest extends CoreTestCase {
         SearchPageObject.typeSearchValue(toFind);
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind);
-        //нажать три точки =не надо org.wikipedia.beta:id/article_menu_bookmark
-        //waitElementPresentBy(By.xpath("//android.widget.ImageView[@content-desc=\"More options\"]")).click();
         //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/article_menu_bookmark")).click();
-        //нажать ADD TO LIST
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.Button[contains(@text,'ADD TO LIST')]")).click();
-        //перейти на активную часть экрана org.wikipedia.beta:id/touch_outside
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/touch_outside")).click();
+        ArticlePageObject.saveArticleToMyList();
+        //нажать ADD TO LIST + перейти на активную часть экрана
+        ArticlePageObject.continueAddToList();
         // выйти из статьи ?
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]")).click();
+        ArticlePageObject.exitFromArticle();
         //обратно
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.ImageButton")).click();
+        SearchPageObject.returnToMainPage();
         //Открыть мои статьи на гл экране
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.FrameLayout[@content-desc=\"My lists\"]")).click();
+        MainPageObject.openMyList();
         //Открыть Сохраненные
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Saved')]")).click();
-        //проверить наличие статьи id=
+        MyListPageObject.openSaved();
+        //проверить наличие статьи
         By articleLocation = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Appium']");
-        MainPageObject.waitElementPresentBy(articleLocation);
+        //MainPageObject.waitElementPresentBy(articleLocation);
+        MyListPageObject.waitElementPresentBy(articleLocation);
         //свайпнуть и удалить
-        MainPageObject.swipeUpElementToLeft(articleLocation, 200);
+        //MainPageObject.swipeUpElementToLeft(articleLocation, 200);
+        MyListPageObject.swipeUpElementToLeft(articleLocation, 200);
         // проверить что статья удалилась, неотображается
-        Assert.assertTrue(MainPageObject.waitElementNotPresentBy(articleLocation));
+        //Assert.assertTrue(MainPageObject.waitElementNotPresentBy(articleLocation));
+        Assert.assertTrue(MyListPageObject.waitElementNotPresentBy(articleLocation));
     }
 
     @Test
@@ -165,43 +167,39 @@ public class FirstTest extends CoreTestCase {
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind1);
         //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/article_menu_bookmark")).click();
-        //нажать ADD TO LIST
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.Button[contains(@text,'ADD TO LIST')]")).click();
-        //перейти на активную часть экрана org.wikipedia.beta:id/touch_outside
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/touch_outside")).click();
-        // выйти из статьи на Поиск?
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]")).click();
+        ArticlePageObject.saveArticleToMyList();
+        //нажать ADD TO LIST + перейти на активную часть экрана
+        ArticlePageObject.continueAddToList();
+        // выйти из статьи ?
+        ArticlePageObject.exitFromArticle();
         //в нов поле ввода ввести Значение
         MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).clear();
         SearchPageObject.typeSearchValue(toFind2);
         //открыть статью
-        SearchPageObject.openArticleByTitle(toFind1);
+        SearchPageObject.openArticleByTitle(toFind2);
         //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/article_menu_bookmark")).click();
-        //нажать ADD TO LIST
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.Button[contains(@text,'ADD TO LIST')]")).click();
-        //перейти на активную часть экрана org.wikipedia.beta:id/touch_outside
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/touch_outside")).click();
-        // выйти из статьи на Поиск?
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]")).click();
-        //обратно	из Поиска
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.ImageButton")).click();
+        ArticlePageObject.saveArticleToMyList();
+        //нажать ADD TO LIST + перейти на активную часть экрана
+        ArticlePageObject.continueAddToList();
+        // выйти из статьи ?
+        ArticlePageObject.exitFromArticle();
+        //обратно
+        SearchPageObject.returnToMainPage();
         //Открыть мои статьи на гл экране
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.FrameLayout[@content-desc=\"My lists\"]")).click();
+        MainPageObject.openMyList();
         //Открыть Сохраненные
-        MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Saved')]")).click();
-        //проверить наличие статьи id=
-        By articleLocation1 = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + toFind1 + "']");
-        By articleLocation2 = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + toFind2 + "']");
-        MainPageObject.waitElementPresentBy(articleLocation1);
-        MainPageObject.waitElementPresentBy(articleLocation2);
+        MyListPageObject.openSaved();
+        //проверить наличие статьи
+        MyListPageObject.waiTMyArticlePresentByName(toFind1);
+        MyListPageObject.waiTMyArticlePresentByName(toFind2);
         //свайпнуть и удалить
-        MainPageObject.swipeUpElementToLeft(articleLocation2, 200);
+        MyListPageObject.swipeMyArticleToDelete(toFind2,200);
         // проверить что статья удалилась, неотображается
-        Assert.assertTrue(MainPageObject.waitElementNotPresentBy(articleLocation2));
-        Assert.assertTrue(driver.findElement(articleLocation1).getText().equals(toFind1));
-        driver.findElement(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+        Assert.assertTrue(MyListPageObject.waiTMyArticleNotPresentByName(toFind2));
+        //Assert.assertTrue(driver.findElement(articleLocation1).getText().equals(toFind1));
+        Assert.assertTrue(MyListPageObject.findMyArticleByName(toFind1).getText().equals(toFind1));
+        //driver.findElement(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
+        MyListPageObject.openMyArticle();
         String afterSwipeTitle = ArticlePageObject.getArticleTitle(toFind1);
         Assert.assertEquals(toFind1, afterSwipeTitle);
     }
@@ -219,9 +217,11 @@ public class FirstTest extends CoreTestCase {
         SearchPageObject.openFirstArticle();
         //проверить заголовок
         By titleLocator = By.xpath("//android.view.View");
-        String beforeRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
+        //String beforeRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
+        String beforeRotationTitle = ArticlePageObject.getTitleText();
         driver.rotate(ScreenOrientation.LANDSCAPE);
-        String afterRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
+       // String afterRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
+        String afterRotationTitle = ArticlePageObject.getTitleText();
         Assert.assertEquals(beforeRotationTitle, afterRotationTitle);
     }
 
@@ -252,9 +252,11 @@ public class FirstTest extends CoreTestCase {
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
         //найти статью
-        MainPageObject.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
+        SearchPageObject.getResultSearchByText("Mandarin Chinese");
+        //.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
         driver.runAppInBackground(ofMillis(25));
-        MainPageObject.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
+        SearchPageObject.getResultSearchByText("Mandarin Chinese");
+        //MainPageObject.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
     }
 
 }
