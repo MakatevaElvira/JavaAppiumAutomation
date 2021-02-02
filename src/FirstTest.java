@@ -148,10 +148,10 @@ public class FirstTest extends CoreTestCase {
         MyListPageObject.waitElementPresentBy(articleLocation);
         //свайпнуть и удалить
         //MainPageObject.swipeUpElementToLeft(articleLocation, 200);
-        MyListPageObject.swipeUpElementToLeft(articleLocation, 200);
+        MyListPageObject.swipeMyArticleToDelete(toFind,200);
         // проверить что статья удалилась, неотображается
-        //Assert.assertTrue(MainPageObject.waitElementNotPresentBy(articleLocation));
-        Assert.assertTrue(MyListPageObject.waitElementNotPresentBy(articleLocation));
+        Assert.assertTrue(MyListPageObject.waiTMyArticleNotPresentByName(toFind));
+
     }
 
     @Test
@@ -257,6 +257,33 @@ public class FirstTest extends CoreTestCase {
         driver.runAppInBackground(ofMillis(25));
         SearchPageObject.getResultSearchByText("Mandarin Chinese");
         //MainPageObject.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
+    }
+    @Test
+    public void testAssertTitleAndDescription() throws InterruptedException {
+        String toFind = "Mandarin";
+        String description = "Chinese";
+        //пропустить
+        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        //кликнуть поиск
+        SearchPageObject.initSearchInput();
+        //в нов поле ввода ввести Значение
+        SearchPageObject.typeSearchValue(toFind);
+        //поискать результат по названию и описанию статьи
+        Assert.assertTrue(SearchPageObject.waitForElementByTitleAndDescription(toFind,description));
+    }
+    @Test
+    public void testSearchResultsAssertion() throws InterruptedException {
+        String toFind = "Mandarin";
+        String description = "Chinese";
+        //пропустить
+        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        //кликнуть поиск
+        SearchPageObject.initSearchInput();
+        //в нов поле ввода ввести Значение
+        SearchPageObject.typeSearchValue(toFind);
+        //SearchPageObject.swipeUp(1500);
+        //проверить результаты
+        SearchPageObject.searchCount();
     }
 
 }
