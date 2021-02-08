@@ -1,3 +1,5 @@
+package tests;
+
 public class MainClass {
     private int classNumber = 20;
     private String classString = "Hello, world";

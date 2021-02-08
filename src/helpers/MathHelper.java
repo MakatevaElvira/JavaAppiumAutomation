@@ -1,3 +1,5 @@
+package helpers;
+
 public class MathHelper {
 
     public int simpleInt = 7;

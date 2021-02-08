@@ -1,3 +1,6 @@
+package tests;
+
+import helpers.MathHelper;
 import lib.CoreTestCase;
 import org.junit.Test;
 
