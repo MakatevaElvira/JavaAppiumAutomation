@@ -15,21 +15,21 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     private static final String
-            VIEW_ELEMENT = "//*[@text='View article in browser']",
-            ARTICLE_MENU_BOOKMARK = "org.wikipedia.beta:id/article_menu_bookmark",
-            ADD_TO_LIST = "//android.widget.Button[contains(@text,'ADD TO LIST')]",
-            TOUCH_OUTSIDE = "org.wikipedia.beta:id/touch_outside",
-            NAVIGATE_UP = "//android.widget.ImageButton[@content-desc=\"Navigate up\"]";
+            VIEW_ELEMENT = "xpath://*[@text='View article in browser']",
+            ARTICLE_MENU_BOOKMARK = "id:org.wikipedia.beta:id/article_menu_bookmark",
+            ADD_TO_LIST = "xpath://android.widget.Button[contains(@text,'ADD TO LIST')]",
+            TOUCH_OUTSIDE = "id:org.wikipedia.beta:id/touch_outside",
+            NAVIGATE_UP = "xpath://android.widget.ImageButton[@content-desc=\"Navigate up\"]";
 
     public String getArticleTitle(String title) {
-        return waitElementPresentBy(By.xpath("//android.view.View[@text='" + title + "']")).getText();
+        return waitElementPresentBy("xpath://android.view.View[@text='" + title + "']").getText();
     }
     public String getTitleText(){
-        return waitElementPresentBy(By.xpath("//android.view.View")).getAttribute("text");
+        return waitElementPresentBy("xpath://android.view.View").getAttribute("text");
     }
 
     public void swipeToViewElement(int size) {
-        swipeUpToFindElement(By.xpath(VIEW_ELEMENT), size);
+        swipeUpToFindElement((VIEW_ELEMENT), size);
     }
 
     public void swipeUp(int timeOfSwipe) {
@@ -44,16 +44,16 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public void saveArticleToMyList() {
-        waitElementPresentBy(By.id(ARTICLE_MENU_BOOKMARK)).click();
+        waitElementPresentBy(ARTICLE_MENU_BOOKMARK).click();
     }
 
     public void continueAddToList() {
-        waitElementPresentBy(By.xpath(ADD_TO_LIST)).click();
-        waitElementPresentBy(By.id(TOUCH_OUTSIDE)).click();
+        waitElementPresentBy((ADD_TO_LIST)).click();
+        waitElementPresentBy((TOUCH_OUTSIDE)).click();
     }
 
     public void exitFromArticle() {
-        waitElementPresentBy(By.xpath(NAVIGATE_UP)).click();
+        waitElementPresentBy((NAVIGATE_UP)).click();
     }
 
 }

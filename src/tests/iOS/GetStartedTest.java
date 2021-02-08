@@ -30,8 +30,8 @@ public class GetStartedTest extends iOSTestCase  {
     @Test
     public void testFirstSearch() {
         System.out.println("Java+Appium=start test!!!");
-        MainPage.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
-        String searchText = MainPage.waitElementPresentBy(By.xpath("//*[contains(@text,'Search Wikipedia')]")).getText();
+        MainPage.skipStartInformation();
+        String searchText = MainPage.findSearchInputField().getText();
         System.out.println(searchText);
     }
 

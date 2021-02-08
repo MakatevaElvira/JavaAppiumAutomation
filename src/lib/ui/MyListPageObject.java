@@ -10,33 +10,33 @@ public class MyListPageObject extends MainPageObject {
     }
 
     private static final String
-            SAVED_TITLES = "//android.widget.TextView[contains(@text,'Saved')]",
-            ARTICLE_ELEMENT = "org.wikipedia.beta:id/page_list_item_title",
+            SAVED_TITLES = "xpath://android.widget.TextView[contains(@text,'Saved')]",
+            ARTICLE_ELEMENT = "id:org.wikipedia.beta:id/page_list_item_title",
             MY_ARTICLE_NAME_TPL =
-                    "//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='{ArticleName}']";
+                    "xpath://android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='{ArticleName}']";
 
     public void openSaved() {
-        waitElementPresentBy(By.xpath(SAVED_TITLES)).click();
+        waitElementPresentBy((SAVED_TITLES)).click();
     }
 
     public void waiTMyArticlePresentByName(String name) {
-        waitElementPresentBy(By.xpath(getArticleByText(name)));
+        waitElementPresentBy((getArticleByText(name)));
     }
 
     public Boolean waiTMyArticleNotPresentByName(String name) {
-        return waitElementNotPresentBy(By.xpath(getArticleByText(name)));
+        return waitElementNotPresentBy((getArticleByText(name)));
     }
 
     public WebElement findMyArticleByName(String name) {
-        return waitElementPresentBy(By.xpath(getArticleByText(name)));
+        return waitElementPresentBy((getArticleByText(name)));
     }
 
     public void openMyArticle() {
-        waitElementPresentBy(By.id(ARTICLE_ELEMENT)).click();
+        waitElementPresentBy((ARTICLE_ELEMENT)).click();
     }
 
     public void swipeMyArticleToDelete(String name, int time) {
-        swipeUpElementToLeft(By.xpath(getArticleByText(name)), time);
+        swipeUpElementToLeft("xpath:"+getArticleByText(name), time);
     }
 
     /*TEMPLATES METHODS */

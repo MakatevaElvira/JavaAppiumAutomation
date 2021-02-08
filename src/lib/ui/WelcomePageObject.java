@@ -9,29 +9,29 @@ public class WelcomePageObject extends MainPageObject{
     }
 
     private static final String
-            STEP_LEARN_MORE_ABOUT_WIKIPEDIA = "Learn more about Wikipedia",
-            NEXT_BUTTON = "Next",
-            GET_STARTED_BUTTON = "Get started",
-            STEP_NEW_WAYS = "New ways to explore",
-            STEP_ADD_OR_EDIT_PREFERRED_LANGUAGES = "Add or edit preferred languages",
-            STEP_LEARN_MORE_ABOUT_DATA_COLLECTED = "Learn more about data collected";
+            STEP_LEARN_MORE_ABOUT_WIKIPEDIA = "id:Learn more about Wikipedia",
+            NEXT_BUTTON = "id:Next",
+            GET_STARTED_BUTTON = "id:Get started",
+            STEP_NEW_WAYS = "id:New ways to explore",
+            STEP_ADD_OR_EDIT_PREFERRED_LANGUAGES = "id:Add or edit preferred languages",
+            STEP_LEARN_MORE_ABOUT_DATA_COLLECTED = "id:Learn more about data collected";
 
     public void waitLearnMoreWikipediaLink(){
-        waitElementPresentBy(By.id(STEP_LEARN_MORE_ABOUT_WIKIPEDIA));
+        waitElementPresentBy((STEP_LEARN_MORE_ABOUT_WIKIPEDIA));
     }
     public void clickNextButton(){
-        waitElementPresentBy(By.id(NEXT_BUTTON)).click();
+        waitElementPresentBy((NEXT_BUTTON)).click();
     }
     public void clickGetStartedButton(){
-        waitElementPresentBy(By.id(GET_STARTED_BUTTON)).click();
+        waitElementPresentBy((GET_STARTED_BUTTON)).click();
     }
     public void waitNewWaysLink(){
-        waitElementPresentBy(By.id(STEP_NEW_WAYS));
+        waitElementPresentBy((STEP_NEW_WAYS));
     }
     public void waitAddOrEditLanguagesLink(){
-        waitElementPresentBy(By.id(STEP_ADD_OR_EDIT_PREFERRED_LANGUAGES));
+        waitElementPresentBy((STEP_ADD_OR_EDIT_PREFERRED_LANGUAGES));
     }
     public void waitLearnMoreDataCollectedLink(){
-        waitElementPresentBy(By.id(STEP_LEARN_MORE_ABOUT_DATA_COLLECTED));
+        waitElementPresentBy((STEP_LEARN_MORE_ABOUT_DATA_COLLECTED));
     }
 }

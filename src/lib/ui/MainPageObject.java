@@ -23,19 +23,23 @@ public class MainPageObject {
     }
 
     private static final String
-            MY_LIST = "//android.widget.FrameLayout[@content-desc=\"My lists\"]";
+            MY_LIST = "xpath://android.widget.FrameLayout[@content-desc=\"My lists\"]",
+            SKIP = "xpath://*[contains(@text,'SKIP')]",
+            SEARCH_INPUT_FIELD = "xpath://*[contains(@text,'Search Wikipedia')]";
 
-    public WebElement waitElementPresentBy(By locator) {
+    public WebElement waitElementPresentBy(String locator) {
+        By by = getLocatorByString(locator);
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
         webDriverWait.withMessage("No element present by locator: " + locator);
-        return webDriverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        return webDriverWait.until(ExpectedConditions.presenceOfElementLocated(by));
 
     }
 
-    public Boolean assertElementPresent(By locator) {
+    public Boolean assertElementPresent(String locator) {
         WebDriverWait webDriverWait = new WebDriverWait(driver, 0);
         webDriverWait.withMessage("No element present by locator: " + locator);
-        List<WebElement> elements = webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        List<WebElement> elements = webDriverWait.until(ExpectedConditions
+                .presenceOfAllElementsLocatedBy(getLocatorByString(locator)));
         if (elements.size() > 0) {
             return true;
         }
@@ -43,21 +47,22 @@ public class MainPageObject {
 
     }
 
-    public List<WebElement> waitElementsPresentBy(By locator) {
+    public List<WebElement> waitElementsPresentBy(String locator) {
+        By by = getLocatorByString(locator);
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
         webDriverWait.withMessage("No element present by locator: " + locator);
-        return webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        return webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 
     }
 
-    public Boolean waitElementNotPresentBy(By locator) {
+    public Boolean waitElementNotPresentBy(String locator) {
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
         webDriverWait.withMessage("No element present by locator: " + locator);
-        return webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+        return webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(getLocatorByString(locator)));
 
     }
 
-    public boolean assertElementHasText(By locator, String expectedText, String errorMessage) {
+    public boolean assertElementHasText(String locator, String expectedText, String errorMessage) {
         String gettingText = waitElementPresentBy(locator).getAttribute("name");
         System.out.println("expected= " + expectedText);
         System.out.println("getting= " + gettingText);
@@ -84,9 +89,9 @@ public class MainPageObject {
         swipeUp(200);
     }
 
-    public void swipeUpToFindElement(By by, int maxSwipes) {
+    public void swipeUpToFindElement(String by, int maxSwipes) {
         int alreadySwipe = 0;
-        while (driver.findElements(by).size() == 0) {
+        while (waitElementsPresentBy(by).size() == 0) { //driver.findElements
             if (alreadySwipe > maxSwipes) {
                 waitElementPresentBy(by);
                 return;
@@ -96,7 +101,7 @@ public class MainPageObject {
         }
     }
 
-    public void swipeUpElementToLeft(By by, int timeOfSwipe) {
+    public void swipeUpElementToLeft(String by, int timeOfSwipe) {
         WebElement element = waitElementPresentBy(by);
         int leftX = (int) (element.getLocation().getX() * 0.1);
         int rightX = (int) ((leftX + element.getSize().getWidth()) * 0.9);//прибавили к левой точке ширину элемента и получили правую
@@ -110,27 +115,32 @@ public class MainPageObject {
 
     }
 
-    public String findElementAndGetAttribute(By locator, String attribute) {
+    public String findElementAndGetAttribute(String locator, String attribute) {
         return waitElementPresentBy(locator).getAttribute(attribute);
 
     }
 
     public void openMyList() {
-        waitElementPresentBy(By.xpath(MY_LIST)).click();
+        waitElementPresentBy(MY_LIST).click();
     }
 
     public By getLocatorByString(String locatorWithType) {
         String[] explodedLocator = locatorWithType.split(Pattern.quote(":"), 2);
         String byType = explodedLocator[0];
         String locator = explodedLocator[1];
-        if (byType.equals("xpath")){
+        if (byType.equals("xpath")) {
             return By.xpath(locator);
-        } else if (byType.equals("id")){
+        } else if (byType.equals("id")) {
             return By.id(locator);
         } else {
-            throw new IllegalArgumentException("Can`t find locatorWithType= "+locatorWithType);
+            throw new IllegalArgumentException("Can`t find locatorWithType= " + locatorWithType);
         }
     }
-
+    public void skipStartInformation() {
+        waitElementPresentBy(SKIP).click();
+    }
+    public WebElement findSearchInputField() {
+        return waitElementPresentBy(SEARCH_INPUT_FIELD);
+    }
 }
 

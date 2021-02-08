@@ -32,8 +32,8 @@ public class FirstTest extends CoreTestCase {
     @Test
     public void testFirstSearch() {
         System.out.println("Java+Appium=start test!!!");
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
-        String searchText = MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'Search Wikipedia')]")).getText();
+        MainPageObject.skipStartInformation();
+        String searchText = MainPageObject.findSearchInputField().getText();
         System.out.println(searchText);
         //waitElementPresentBy(By.xpath("//android.widget.HorizontalScrollView[@content-desc=\"Page 1 of 4\"]/android.widget.LinearLayout/android.widget.LinearLayout[4]")).click();
         //waitElementPresentBy(By.id("org.wikipedia.beta:id/bottomOffset")).click();
@@ -42,8 +42,8 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testOfElementsTextAssertion() {
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
-        Boolean result = MainPageObject.assertElementHasText(By.xpath("//*[contains(@text,'Search Wikipedia')]"), "Search Wikipedia",
+        MainPageObject.skipStartInformation();
+        Boolean result = MainPageObject.assertElementHasText(("xpath://*[contains(@text,'Search Wikipedia')]"), "Search Wikipedia",
                 "Elements text is not = Search Wikipedia");
         System.out.println("result= " + result);
         Assert.assertTrue(result);
@@ -53,7 +53,7 @@ public class FirstTest extends CoreTestCase {
     public void testOfSearchCancellation() {
         String toFind = "google";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         // MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
         SearchPageObject.initSearchInput();
@@ -75,7 +75,7 @@ public class FirstTest extends CoreTestCase {
     public void testSearchResultChecking() {
         String toFind = "Google";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         //MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
         SearchPageObject.initSearchInput();
@@ -94,7 +94,7 @@ public class FirstTest extends CoreTestCase {
     public void testSwiping() throws InterruptedException {
         String toFind = "Google";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -111,7 +111,7 @@ public class FirstTest extends CoreTestCase {
     public void testBeforeElementSwiping() throws InterruptedException {
         String toFind = "Appium";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
@@ -125,7 +125,7 @@ public class FirstTest extends CoreTestCase {
     public void testBigUserTask() throws InterruptedException {
         String toFind = "Appium";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -145,7 +145,7 @@ public class FirstTest extends CoreTestCase {
         //Открыть Сохраненные
         MyListPageObject.openSaved();
         //проверить наличие статьи
-        By articleLocation = By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Appium']");
+        String articleLocation = "xpath://android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Appium']";
         //MainPageObject.waitElementPresentBy(articleLocation);
         MyListPageObject.waitElementPresentBy(articleLocation);
         //свайпнуть и удалить
@@ -161,7 +161,7 @@ public class FirstTest extends CoreTestCase {
         String toFind1 = "Appium";
         String toFind2 = "Mandarin";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -175,7 +175,7 @@ public class FirstTest extends CoreTestCase {
         // выйти из статьи ?
         ArticlePageObject.exitFromArticle();
         //в нов поле ввода ввести Значение
-        MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).clear();
+        MainPageObject.waitElementPresentBy(("id:org.wikipedia.beta:id/search_src_text")).clear();
         SearchPageObject.typeSearchValue(toFind2);
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind2);
@@ -210,7 +210,7 @@ public class FirstTest extends CoreTestCase {
     public void testRotation() {
         String toFind = "How deep is your love";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -231,7 +231,7 @@ public class FirstTest extends CoreTestCase {
     public void testTitleAssertion() {
         String toFind = "Appium";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -248,7 +248,7 @@ public class FirstTest extends CoreTestCase {
     public void testOfBackGround() {
         String toFind = "mandarin";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -265,7 +265,7 @@ public class FirstTest extends CoreTestCase {
         String toFind = "Mandarin";
         String description = "Chinese";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
@@ -278,7 +278,7 @@ public class FirstTest extends CoreTestCase {
         String toFind = "Mandarin";
         String description = "Chinese";
         //пропустить
-        MainPageObject.waitElementPresentBy(By.xpath("//*[contains(@text,'SKIP')]")).click();
+        MainPageObject.skipStartInformation();
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
