@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.iOSTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;

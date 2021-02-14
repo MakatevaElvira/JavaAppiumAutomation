@@ -2,6 +2,7 @@ package lib;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import junit.framework.TestCase;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -59,7 +60,7 @@ public class iOSTestCase extends TestCase {
             capabilities.setCapability("app", "C:\\Users\\79061\\Documents" +
                     "\\GitHub\\javaMobile\\apks\\wikipedia.app");
             capabilities.setCapability("orientation", "PORTRAIT");
-            return driver = new AndroidDriver(new URL(appiumUrl), capabilities);//  добавить драйвер !!!!!!!!"!"!!!!!!!
+            return driver = new IOSDriver(new URL(appiumUrl), capabilities);
         } else new Exception("No platform find by Platform name ="+platform);
         return driver;
     }
