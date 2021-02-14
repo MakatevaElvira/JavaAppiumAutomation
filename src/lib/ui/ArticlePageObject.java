@@ -4,32 +4,44 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 
 import static java.time.Duration.ofMillis;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    private static final String
-            VIEW_ELEMENT = "xpath://*[@text='View article in browser']",
-            ARTICLE_MENU_BOOKMARK = "id:org.wikipedia.beta:id/article_menu_bookmark",
-            ADD_TO_LIST = "xpath://android.widget.Button[contains(@text,'ADD TO LIST')]",
-            TOUCH_OUTSIDE = "id:org.wikipedia.beta:id/touch_outside",
-            NAVIGATE_UP = "xpath://android.widget.ImageButton[@content-desc=\"Navigate up\"]";
+    protected static  String
+            VIEW_ELEMENT ,
+            ARTICLE_MENU_BOOKMARK ,
+            ADD_TO_LIST ,
+            TOUCH_OUTSIDE,
+            NAVIGATE_UP ;
 
     public String getArticleTitle(String title) {
+        if (Platform.getInstance().isAndroid()) {
+            return waitElementPresentBy("xpath://android.view.View[@text='" + title + "']").getText();
+        } else  {return waitElementPresentBy("id:'" + title + "']").getAttribute("name");
+        }
+    }
+    public String getArticleTitleOld(String title) {
         return waitElementPresentBy("xpath://android.view.View[@text='" + title + "']").getText();
     }
     public String getTitleText(){
-        return waitElementPresentBy("xpath://android.view.View").getAttribute("text");
+            return waitElementPresentBy("xpath://android.view.View").getAttribute("text");
     }
 
     public void swipeToViewElement(int size) {
-        swipeUpToFindElement((VIEW_ELEMENT), size);
+        if (Platform.getInstance().isAndroid()){
+            swipeUpToFindElement((VIEW_ELEMENT), size);
+        }
+        else if (Platform.getInstance().isIOs()){
+            swipeUpElementAppear(VIEW_ELEMENT,size);
+        }
     }
 
     public void swipeUp(int timeOfSwipe) {

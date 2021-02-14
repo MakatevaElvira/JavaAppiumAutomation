@@ -15,6 +15,15 @@ public class Platform {
             iOS_PLATFORM = "iOs",
             APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
 
+    private static Platform instance;
+
+    private Platform(){}
+    public static Platform getInstance(){
+        if (instance == null){
+            instance = new Platform();
+        }
+        return instance;
+    }
 
     public AppiumDriver getDriverWithCapabilitiesFor(String platform) throws MalformedURLException {
         if (isAndroid()) {

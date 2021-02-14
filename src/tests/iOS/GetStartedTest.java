@@ -10,18 +10,18 @@ import org.junit.Test;
 public class GetStartedTest extends CoreTestCase {
     public WelcomePageObject WelcomePage;
     public MainPageObject MainPage;
-    public Platform Platform;
+    //public Platform Platform;
 
     protected void setUp() throws Exception {
         super.setUp();
         WelcomePage = new WelcomePageObject(driver);
         MainPage = new MainPageObject(driver);
-        Platform = new Platform();
+        //Platform = new Platform();
     }
 
     @Test
     public void testPassThroughWelcome(){
-        if (Platform.isAndroid()){
+        if (Platform.getInstance().isAndroid()){
             return;
         }
         WelcomePage.waitLearnMoreWikipediaLink();
@@ -36,7 +36,7 @@ public class GetStartedTest extends CoreTestCase {
     }
     @Test
     public void testFirstSearch() {
-        if (Platform.isAndroid()){
+        if (Platform.getInstance().isAndroid()){
             return;
         }
         System.out.println("Java+Appium=start test!!!");

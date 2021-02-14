@@ -6,6 +6,8 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -15,6 +17,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static java.time.Duration.ofMillis;
+import static javax.swing.UIManager.get;
 
 public class FirstTest extends CoreTestCase {
     private MainPageObject MainPageObject;
@@ -25,8 +28,8 @@ public class FirstTest extends CoreTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         MainPageObject = new MainPageObject(driver);
-        SearchPageObject = new SearchPageObject(driver);
-        ArticlePageObject = new ArticlePageObject(driver);
+        SearchPageObject = SearchPageObjectFactory.get(driver);
+        ArticlePageObject = ArticlePageObjectFactory.get(driver);
         MyListPageObject = new MyListPageObject(driver);
     }
 
