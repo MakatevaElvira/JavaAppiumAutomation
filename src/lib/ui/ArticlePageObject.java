@@ -63,6 +63,10 @@ abstract public class ArticlePageObject extends MainPageObject {
         waitElementPresentBy((ADD_TO_LIST)).click();
         waitElementPresentBy((TOUCH_OUTSIDE)).click();
     }
+    public void addArticleToMySaved() {//доработать под iOS
+        waitElementPresentBy((ADD_TO_LIST)).click();
+        waitElementPresentBy((TOUCH_OUTSIDE)).click();
+    }
 
     public void exitFromArticle() {
         waitElementPresentBy((NAVIGATE_UP)).click();

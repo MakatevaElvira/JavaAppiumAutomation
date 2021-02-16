@@ -3,18 +3,18 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 
-public class WelcomePageObject extends MainPageObject{
+abstract public class WelcomePageObject extends MainPageObject{
     public WelcomePageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    private static final String
-            STEP_LEARN_MORE_ABOUT_WIKIPEDIA = "id:Learn more about Wikipedia",
-            NEXT_BUTTON = "id:Next",
-            GET_STARTED_BUTTON = "id:Get started",
-            STEP_NEW_WAYS = "id:New ways to explore",
-            STEP_ADD_OR_EDIT_PREFERRED_LANGUAGES = "id:Add or edit preferred languages",
-            STEP_LEARN_MORE_ABOUT_DATA_COLLECTED = "id:Learn more about data collected";
+    protected static  String
+            STEP_LEARN_MORE_ABOUT_WIKIPEDIA ,
+            NEXT_BUTTON ,
+            GET_STARTED_BUTTON ,
+            STEP_NEW_WAYS ,
+            STEP_ADD_OR_EDIT_PREFERRED_LANGUAGES ,
+            STEP_LEARN_MORE_ABOUT_DATA_COLLECTED;
 
     public void waitLearnMoreWikipediaLink(){
         waitElementPresentBy((STEP_LEARN_MORE_ABOUT_WIKIPEDIA));

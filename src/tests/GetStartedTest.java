@@ -1,10 +1,11 @@
-package tests.iOS;
+package tests;
 
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.iOSTestCase;
 import lib.ui.MainPageObject;
 import lib.ui.WelcomePageObject;
+import lib.ui.factories.WelcomePgeObjectFactory;
 import org.junit.Test;
 
 public class GetStartedTest extends CoreTestCase {
@@ -14,7 +15,7 @@ public class GetStartedTest extends CoreTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        WelcomePage = new WelcomePageObject(driver);
+        WelcomePage = WelcomePgeObjectFactory.get(driver);
         MainPage = new MainPageObject(driver);
         //Platform = new Platform();
     }

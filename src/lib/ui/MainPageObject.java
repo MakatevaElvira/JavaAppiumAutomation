@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -112,13 +113,36 @@ public class MainPageObject {
         PointOption startPoint = new PointOption().withCoordinates(rightX, middleY);
         PointOption endPoint = new PointOption().withCoordinates(leftX, middleY);
         TouchAction action = new TouchAction(driver);
-        action.press(startPoint).waitAction(new WaitOptions().withDuration(ofMillis(timeOfSwipe))).moveTo(endPoint).release().perform();
+        action.press(startPoint);
+        action.waitAction(new WaitOptions().withDuration(ofMillis(timeOfSwipe)));
+        if (Platform.getInstance().isAndroid()){
+            action.moveTo(endPoint);
+        }else {
+            int offsetX = (-1 * element.getSize().getWidth());
+            PointOption offsetPoint = new PointOption().withCoordinates(offsetX, 0);
+            action.moveTo(offsetPoint);
+        }
+        action.release().perform();
+        if (Platform.getInstance().isIOs()){
+            clickToElementsUpperCorner(by);
+        }
+    }
 
+    public void clickToElementsUpperCorner(String locator){
+        WebElement element = waitElementPresentBy(locator + "/..");
+        int rightX = (element.getLocation().getX());//прибавили к левой точке ширину элемента и получили правую
+        int upperY = element.getLocation().getY();
+        int lowerY = upperY + element.getSize().getHeight();//прибавили к верхней точке высоту элемента и получили нижнюю
+        int middleY = (upperY + lowerY) / 2;
+        int width = element.getSize().getWidth();
+        int pointToClickX = (rightX + width)-3;
+        PointOption clickPoint = new PointOption().withCoordinates(pointToClickX, middleY);
+        TouchAction action = new TouchAction(driver);
+        action.tap(clickPoint).perform();
     }
 
     public String findElementAndGetAttribute(String locator, String attribute) {
         return waitElementPresentBy(locator).getAttribute(attribute);
-
     }
 
     public void openMyList() {
@@ -159,4 +183,3 @@ public class MainPageObject {
         return elementLocationByY < screenSizeByY;
     }
 }
-

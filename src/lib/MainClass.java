@@ -1,4 +1,4 @@
-package tests;
+package lib;
 
 public class MainClass {
     private int classNumber = 20;

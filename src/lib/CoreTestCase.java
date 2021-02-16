@@ -3,6 +3,7 @@ package lib;
 import io.appium.java_client.AppiumDriver;
 import junit.framework.TestCase;
 import lib.ui.WelcomePageObject;
+import lib.ui.factories.WelcomePgeObjectFactory;
 
 public class CoreTestCase extends TestCase {
     protected AppiumDriver driver;
@@ -23,7 +24,7 @@ public class CoreTestCase extends TestCase {
 
     private void skipWelcomePageForIosApp(){
         if (Platform.getInstance().isIOs()){
-            WelcomePageObject welcomePage = new WelcomePageObject(driver);
+            WelcomePageObject welcomePage = WelcomePgeObjectFactory.get(driver);
             welcomePage.skipStartInformation();
         }
     }

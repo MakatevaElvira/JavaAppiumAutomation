@@ -4,16 +4,15 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class MyListPageObject extends MainPageObject {
+abstract public class MyListPageObject extends MainPageObject {
     public MyListPageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    private static final String
-            SAVED_TITLES = "xpath://android.widget.TextView[contains(@text,'Saved')]",
-            ARTICLE_ELEMENT = "id:org.wikipedia.beta:id/page_list_item_title",
-            MY_ARTICLE_NAME_TPL =
-                    "xpath://android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='{ArticleName}']";
+    protected static String
+            SAVED_TITLES ,
+            ARTICLE_ELEMENT ,
+            MY_ARTICLE_NAME_TPL ;
 
     public void openSaved() {
         waitElementPresentBy((SAVED_TITLES)).click();
@@ -36,7 +35,7 @@ public class MyListPageObject extends MainPageObject {
     }
 
     public void swipeMyArticleToDelete(String name, int time) {
-        swipeUpElementToLeft("xpath:"+getArticleByText(name), time);
+        swipeUpElementToLeft(getArticleByText(name), time);
     }
 
     /*TEMPLATES METHODS */
