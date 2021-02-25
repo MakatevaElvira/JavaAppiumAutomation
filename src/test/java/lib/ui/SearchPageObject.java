@@ -58,7 +58,8 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void openArticleByTitle(String titel) {
-        waitElementPresentBy(("xpath://*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + titel + "']")).click();
+        waitElementPresentBy(getResultSearchTitleByText(titel)).click();
+        //waitElementPresentBy(("xpath://*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='" + titel + "']")).click();
     }
 
     public void openFirstArticle() {
@@ -106,6 +107,9 @@ abstract public class SearchPageObject extends MainPageObject {
     /*TEMPLATES METHODS */
     public static String getResultSearchByText(String text) {
         return SEARCH_RESULT_BY_TPL.replace("{SUBSTRING}", text);
+    }
+    public static String getResultSearchTitleByText(String text) {
+        return SEARCH_RESULT_TITLE_BY_TPL.replace("{SUBSTRING}", text);
     }
 
     /*TEMPLATES METHODS */

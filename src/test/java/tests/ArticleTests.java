@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;
@@ -30,30 +31,50 @@ public class ArticleTests extends CoreTestCase {
         String toFind1 = "Appium";
         String toFind2 = "Mandarin";
         //пропустить
-        MainPageObject.skipStartInformation();
+        if (Platform.getInstance().isMW()){
+            System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
+        }else {
+            MainPageObject.skipStartInformation();
+        }
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind1);
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind1);
-        //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-        ArticlePageObject.saveArticleToMyList();
-        //нажать ADD TO LIST + перейти на активную часть экрана
-        ArticlePageObject.continueAddToList();
-        // выйти из статьи ?
-        ArticlePageObject.exitFromArticle();
+
+        if (Platform.getInstance().isMW()){
+            //добавить в избранное
+            ArticlePageObject.addToList();
+            //открыть поиск
+            SearchPageObject.initSearchInput();
+        }else {
+            //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
+            ArticlePageObject.saveArticleToMyList();
+            //нажать ADD TO LIST + перейти на активную часть экрана
+            ArticlePageObject.continueAddToList();
+            // выйти из статьи ?
+            ArticlePageObject.exitFromArticle();
+        }
+
         //в нов поле ввода ввести Значение
         MainPageObject.waitElementPresentBy(("id:org.wikipedia.beta:id/search_src_text")).clear();
         SearchPageObject.typeSearchValue(toFind2);
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind2);
-        //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-        ArticlePageObject.saveArticleToMyList();
-        //нажать ADD TO LIST + перейти на активную часть экрана
-        ArticlePageObject.continueAddToList();
-        // выйти из статьи ?
-        ArticlePageObject.exitFromArticle();
+        if (Platform.getInstance().isMW()){
+            //добавить в избранное
+            ArticlePageObject.addToList();
+            //открыть поиск
+            SearchPageObject.initSearchInput();
+        }else {
+            //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
+            ArticlePageObject.saveArticleToMyList();
+            //нажать ADD TO LIST + перейти на активную часть экрана
+            ArticlePageObject.continueAddToList();
+            // выйти из статьи ?
+            ArticlePageObject.exitFromArticle();
+        }
         //обратно
         SearchPageObject.returnToMainPage();
         //Открыть мои статьи на гл экране

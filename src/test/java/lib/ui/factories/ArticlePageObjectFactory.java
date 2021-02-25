@@ -8,13 +8,16 @@ import lib.ui.android.AndroidArticlePageObject;
 import lib.ui.android.AndroidSearchPageObject;
 import lib.ui.ios.IOsArticlePageObject;
 import lib.ui.ios.IOsSearchPageObject;
+import lib.ui.mobileWeb.MWArticlePageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class ArticlePageObjectFactory {
     public static ArticlePageObject get(RemoteWebDriver driver){
         if (Platform.getInstance().isAndroid()){
             return new AndroidArticlePageObject(driver);
-        } else {
+        } else if(Platform.getInstance().isMW()){
+            return new MWArticlePageObject(driver);
+        }else {
             return new IOsArticlePageObject(driver);
         }
     }

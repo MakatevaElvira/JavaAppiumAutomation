@@ -6,10 +6,7 @@ import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import lib.Platform;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -203,7 +200,39 @@ public class MainPageObject {
 
     public Boolean isElementLocatedOnTheScreen(String locator) {
         int elementLocationByY = waitElementPresentBy(locator).getLocation().getY();
+        if (Platform.getInstance().isMW()){
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+           Object jsResult = JSExecutor.executeScript("return window.pageYOffset");
+           elementLocationByY -= Integer.parseInt(jsResult.toString());
+        }
         int screenSizeByY = driver.manage().window().getSize().getHeight();//получить длину экрана
         return elementLocationByY < screenSizeByY;
+    }
+    public void scrollWebPageUp(){
+        if (Platform.getInstance().isMW()){
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+            JSExecutor.executeScript("window.scrollBy(0,250)");
+        } else {
+            System.out.println("Scroll not work for platform= "+Platform.getInstance().getPlatformVar());
+        }
+    }
+    public void scrollWebElementTillNotVisible(String locator,int maxSwipes){
+        int alreadySwipe = 0;
+        WebElement element = waitElementPresentBy(locator);
+        while (!isElementLocatedOnTheScreen(locator)){
+            scrollWebPageUp();
+            ++alreadySwipe;
+            if (alreadySwipe > maxSwipes){
+                System.out.println("Element with locator= "+ locator+" is not LocatedOnTheScreen");
+                return;
+            }
+        }
+
+        if (Platform.getInstance().isMW()){
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+            JSExecutor.executeScript("window.scrollBy(0,250)");
+        } else {
+            System.out.println("Scroll not work for platform= "+Platform.getInstance().getPlatformVar());
+        }
     }
 }

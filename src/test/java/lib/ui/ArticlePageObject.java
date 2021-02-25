@@ -20,6 +20,7 @@ abstract public class ArticlePageObject extends MainPageObject {
     protected static String
             VIEW_ELEMENT,
             ARTICLE_MENU_BOOKMARK,
+            ARTICLE_TITLE,
             ADD_TO_LIST,
             TOUCH_OUTSIDE,
             NAVIGATE_UP;
@@ -27,6 +28,8 @@ abstract public class ArticlePageObject extends MainPageObject {
     public String getArticleTitle(String title) {
         if (Platform.getInstance().isAndroid()) {
             return waitElementPresentBy("xpath://android.view.View[@text='" + title + "']").getText();
+        } else if (Platform.getInstance().isMW()) {
+            return waitElementPresentBy(ARTICLE_TITLE).getText();//"css:div.pre-content h1"
         } else {
             return waitElementPresentBy("id:'" + title + "']").getAttribute("name");
         }
@@ -45,6 +48,8 @@ abstract public class ArticlePageObject extends MainPageObject {
             swipeUpToFindElement((VIEW_ELEMENT), size);
         } else if (Platform.getInstance().isIOs()) {
             swipeUpElementAppear(VIEW_ELEMENT, size);
+        } else {
+            scrollWebElementTillNotVisible(VIEW_ELEMENT, size);
         }
     }
 
@@ -72,6 +77,9 @@ abstract public class ArticlePageObject extends MainPageObject {
     public void continueAddToList() {
         waitElementPresentBy((ADD_TO_LIST)).click();
         waitElementPresentBy((TOUCH_OUTSIDE)).click();
+    }
+    public void addToList() {
+        waitElementPresentBy((ADD_TO_LIST)).click();
     }
 
     public void addArticleToMySaved() {//доработать под iOS
