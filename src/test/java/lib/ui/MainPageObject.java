@@ -8,7 +8,9 @@ import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,9 +20,9 @@ import java.util.regex.Pattern;
 import static java.time.Duration.ofMillis;
 
 public class MainPageObject {
-    protected AppiumDriver driver;
+    protected RemoteWebDriver driver;
 
-    public MainPageObject(AppiumDriver driver) {
+    public MainPageObject(RemoteWebDriver driver) {
         this.driver = driver;
     }
 
@@ -77,14 +79,20 @@ public class MainPageObject {
     }
 
     public void swipeUp(int timeOfSwipe) {
-        TouchAction action = new TouchAction(driver);
-        Dimension size = driver.manage().window().getSize();
-        int x = size.width / 2;
-        int startY = (int) (size.width * 0.8);
-        int endY = (int) (size.width * 0.2);
-        PointOption startPoint = new PointOption().withCoordinates(x, startY);
-        PointOption endPoint = new PointOption().withCoordinates(x, endY);
-        action.press(startPoint).waitAction(new WaitOptions().withDuration(ofMillis(timeOfSwipe))).moveTo(endPoint).release().perform();
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            TouchAction action = new TouchAction(driver);
+            Dimension size = driver.manage().window().getSize();
+            int x = size.width / 2;
+            int startY = (int) (size.width * 0.8);
+            int endY = (int) (size.width * 0.2);
+            PointOption startPoint = new PointOption().withCoordinates(x, startY);
+            PointOption endPoint = new PointOption().withCoordinates(x, endY);
+            action.press(startPoint).waitAction(new WaitOptions().withDuration(ofMillis(timeOfSwipe))).moveTo(endPoint).release().perform();
+
+        } else {
+            System.out.println("SwipeUp has not for platform= " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     public void swipeQuick() {
@@ -104,41 +112,51 @@ public class MainPageObject {
     }
 
     public void swipeUpElementToLeft(String by, int timeOfSwipe) {
-        WebElement element = waitElementPresentBy(by);
-        int leftX = (int) (element.getLocation().getX() * 0.1);
-        int rightX = (int) ((leftX + element.getSize().getWidth()) * 0.9);//прибавили к левой точке ширину элемента и получили правую
-        int upperY = element.getLocation().getY();
-        int lowerY = upperY + element.getSize().getHeight();//прибавили к верхней точке высоту элемента и получили нижнюю
-        int middleY = (upperY + lowerY) / 2;
-        PointOption startPoint = new PointOption().withCoordinates(rightX, middleY);
-        PointOption endPoint = new PointOption().withCoordinates(leftX, middleY);
-        TouchAction action = new TouchAction(driver);
-        action.press(startPoint);
-        action.waitAction(new WaitOptions().withDuration(ofMillis(timeOfSwipe)));
-        if (Platform.getInstance().isAndroid()){
-            action.moveTo(endPoint);
-        }else {
-            int offsetX = (-1 * element.getSize().getWidth());
-            PointOption offsetPoint = new PointOption().withCoordinates(offsetX, 0);
-            action.moveTo(offsetPoint);
-        }
-        action.release().perform();
-        if (Platform.getInstance().isIOs()){
-            clickToElementsUpperCorner(by);
+        if (driver instanceof AppiumDriver){
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            WebElement element = waitElementPresentBy(by);
+            int leftX = (int) (element.getLocation().getX() * 0.1);
+            int rightX = (int) ((leftX + element.getSize().getWidth()) * 0.9);//прибавили к левой точке ширину элемента и получили правую
+            int upperY = element.getLocation().getY();
+            int lowerY = upperY + element.getSize().getHeight();//прибавили к верхней точке высоту элемента и получили нижнюю
+            int middleY = (upperY + lowerY) / 2;
+            PointOption startPoint = new PointOption().withCoordinates(rightX, middleY);
+            PointOption endPoint = new PointOption().withCoordinates(leftX, middleY);
+            TouchAction action = new TouchAction(driver);
+            action.press(startPoint);
+            action.waitAction(new WaitOptions().withDuration(ofMillis(timeOfSwipe)));
+            if (Platform.getInstance().isAndroid()) {
+                action.moveTo(endPoint);
+            } else {
+                int offsetX = (-1 * element.getSize().getWidth());
+                PointOption offsetPoint = new PointOption().withCoordinates(offsetX, 0);
+                action.moveTo(offsetPoint);
+            }
+            action.release().perform();
+            if (Platform.getInstance().isIOs()) {
+                clickToElementsUpperCorner(by);
+            }
+        } else {
+            System.out.println("SwipeUpElementToLeft has not for platform= "+Platform.getInstance().getPlatformVar());
         }
     }
 
-    public void clickToElementsUpperCorner(String locator){
-        WebElement element = waitElementPresentBy(locator + "/..");
-        int rightX = (element.getLocation().getX());//прибавили к левой точке ширину элемента и получили правую
-        int upperY = element.getLocation().getY();
-        int lowerY = upperY + element.getSize().getHeight();//прибавили к верхней точке высоту элемента и получили нижнюю
-        int middleY = (upperY + lowerY) / 2;
-        int width = element.getSize().getWidth();
-        int pointToClickX = (rightX + width)-3;
-        PointOption clickPoint = new PointOption().withCoordinates(pointToClickX, middleY);
-        TouchAction action = new TouchAction(driver);
-        action.tap(clickPoint).perform();
+    public void clickToElementsUpperCorner(String locator) {
+        if (driver instanceof AppiumDriver){
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            WebElement element = waitElementPresentBy(locator + "/..");
+            int rightX = (element.getLocation().getX());//прибавили к левой точке ширину элемента и получили правую
+            int upperY = element.getLocation().getY();
+            int lowerY = upperY + element.getSize().getHeight();//прибавили к верхней точке высоту элемента и получили нижнюю
+            int middleY = (upperY + lowerY) / 2;
+            int width = element.getSize().getWidth();
+            int pointToClickX = (rightX + width) - 3;
+            PointOption clickPoint = new PointOption().withCoordinates(pointToClickX, middleY);
+            TouchAction action = new TouchAction(driver);
+            action.tap(clickPoint).perform();
+        } else {
+            System.out.println("ClickToElementsUpperCorner has not for platform= "+Platform.getInstance().getPlatformVar());
+        }
     }
 
     public String findElementAndGetAttribute(String locator, String attribute) {
@@ -157,27 +175,33 @@ public class MainPageObject {
             return By.xpath(locator);
         } else if (byType.equals("id")) {
             return By.id(locator);
+        } else if (byType.equals("css")) {
+            return By.cssSelector(locator);
         } else {
             throw new IllegalArgumentException("Can`t find locatorWithType= " + locatorWithType);
         }
     }
+
     public void skipStartInformation() {
         waitElementPresentBy(SKIP).click();
     }
+
     public WebElement findSearchInputField() {
         return waitElementPresentBy(SEARCH_INPUT_FIELD);
     }
-    public void swipeUpElementAppear(String locator, int maxSwipe){
+
+    public void swipeUpElementAppear(String locator, int maxSwipe) {
         int alreadySwiped = 0;
-        while (!isElementLocatedOnTheScreen(locator)){
-            if(alreadySwiped > maxSwipe){
+        while (!isElementLocatedOnTheScreen(locator)) {
+            if (alreadySwiped > maxSwipe) {
                 Assert.assertTrue(isElementLocatedOnTheScreen(locator));
             }
             swipeQuick();
             ++alreadySwiped;
         }
     }
-    public Boolean isElementLocatedOnTheScreen(String locator){
+
+    public Boolean isElementLocatedOnTheScreen(String locator) {
         int elementLocationByY = waitElementPresentBy(locator).getLocation().getY();
         int screenSizeByY = driver.manage().window().getSize().getHeight();//получить длину экрана
         return elementLocationByY < screenSizeByY;

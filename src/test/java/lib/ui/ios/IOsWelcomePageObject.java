@@ -2,10 +2,11 @@ package lib.ui.ios;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.WelcomePageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 
 public class IOsWelcomePageObject extends WelcomePageObject {
-    public IOsWelcomePageObject (AppiumDriver driver){
+    public IOsWelcomePageObject (RemoteWebDriver driver){
         super(driver);
     }
     static {

@@ -1,5 +1,6 @@
 package tests;
 
+import io.appium.java_client.AppiumDriver;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.ArticlePageObject;
@@ -126,7 +127,12 @@ public class FirstTest extends CoreTestCase {
         By titleLocator = By.xpath("//android.view.View");
         //String beforeRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
         String beforeRotationTitle = ArticlePageObject.getTitleText();
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        if (driver instanceof AppiumDriver){
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.rotate(ScreenOrientation.LANDSCAPE);
+        } else {
+            System.out.println("Rotate has not for platform= "+Platform.getInstance().getPlatformVar());
+        }
        // String afterRotationTitle = MainPageObject.findElementAndGetAttribute(titleLocator, "text");
         String afterRotationTitle = ArticlePageObject.getTitleText();
         Assert.assertEquals(beforeRotationTitle, afterRotationTitle);
@@ -161,7 +167,12 @@ public class FirstTest extends CoreTestCase {
         //найти статью
         SearchPageObject.getResultSearchByText("Mandarin Chinese");
         //.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
-        driver.runAppInBackground(ofMillis(25));
+        if (driver instanceof AppiumDriver){
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.runAppInBackground(ofMillis(25));
+        } else {
+            System.out.println("RunAppInBackground has not for platform= "+Platform.getInstance().getPlatformVar());
+        }
         SearchPageObject.getResultSearchByText("Mandarin Chinese");
         //MainPageObject.waitElementPresentBy(By.xpath("//android.view.ViewGroup/*[@resource-id='org.wikipedia.beta:id/page_list_item_title'][@text='Mandarin Chinese']"));
     }

@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
 import java.security.Key;
@@ -17,7 +18,7 @@ import static lib.ui.MyListPageObject.getArticleByText;
 
 
 abstract public class SearchPageObject extends MainPageObject {
-    public SearchPageObject(AppiumDriver driver) {
+    public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -25,6 +26,7 @@ abstract public class SearchPageObject extends MainPageObject {
             SEARCH_INIT_ELEMENT,
             SEARCH_INPUT,
             SEARCH_RESULT,
+            SEARCH_RESULT_TITLE_BY_TPL,
             SEARCH_RESULT_BY_TPL,
             SEARCH_CANCEL_BUTTON,
             FIRST_ARTICLE_TITLE,

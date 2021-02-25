@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;
@@ -27,7 +28,11 @@ public class SearchTests extends CoreTestCase {
     @Test
     public void testFirstSearch() {
         System.out.println("Java+Appium=start test!!!");
-        MainPageObject.skipStartInformation();
+        if (Platform.getInstance().isMW()){
+            System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
+        }else {
+            MainPageObject.skipStartInformation();
+        }
         String searchText = MainPageObject.findSearchInputField().getText();
         System.out.println(searchText);
         System.out.println("Java+Appium=finish test!!!");
@@ -36,7 +41,11 @@ public class SearchTests extends CoreTestCase {
     public void testOfSearchCancellation() {
         String toFind = "google";
         //пропустить
-        MainPageObject.skipStartInformation();
+        if (Platform.getInstance().isMW()){
+            System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
+        }else {
+            MainPageObject.skipStartInformation();
+        }
         //кликнуть поиск
         // MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
         SearchPageObject.initSearchInput();
@@ -58,7 +67,11 @@ public class SearchTests extends CoreTestCase {
     public void testSearchResultChecking() {
         String toFind = "Google";
         //пропустить
-        MainPageObject.skipStartInformation();
+        if (Platform.getInstance().isMW()){
+            System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
+        }else {
+            MainPageObject.skipStartInformation();
+        }
         //кликнуть поиск
         //MainPageObject.waitElementPresentBy(By.xpath("//android.widget.TextView[contains(@text,'Search Wikipedia')]")).click();//org.wikipedia.beta:id/search_container
         SearchPageObject.initSearchInput();
@@ -77,7 +90,11 @@ public class SearchTests extends CoreTestCase {
         String toFind = "Mandarin";
         String description = "Chinese";
         //пропустить
-        MainPageObject.skipStartInformation();
+        if (Platform.getInstance().isMW()){
+            System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
+        }else {
+            MainPageObject.skipStartInformation();
+        }
         //кликнуть поиск
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
