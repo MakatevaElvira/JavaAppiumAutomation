@@ -89,6 +89,9 @@ abstract public class MainPageObject {
     public Boolean isElementPresent(String locator) {
         return getAmountOfElements(locator) > 0;
     }
+    public Boolean isElementVisible(String locator) {
+        return getAmountOfElements(locator) > 0;
+    }
 
     public void swipeUp(int timeOfSwipe) {
         if (driver instanceof AppiumDriver) {
@@ -239,6 +242,8 @@ abstract public class MainPageObject {
     public void scrollWebElementTillNotVisible(String locator, int maxSwipes) {
         int alreadySwipe = 0;
         WebElement element = waitElementPresentBy(locator);
+
+        if (isElementPresent(locator))
         while (!isElementLocatedOnTheScreen(locator)) {
             scrollWebPageUp();
             ++alreadySwipe;

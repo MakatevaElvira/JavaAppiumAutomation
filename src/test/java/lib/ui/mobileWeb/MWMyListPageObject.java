@@ -12,6 +12,6 @@ public class MWMyListPageObject extends MyListPageObject {
         SAVED_TITLES = "id:'Saved')";
         ARTICLE_ELEMENT = "id:org.wikipedia.beta:id/page_list_item_title";
         REMOVED_FROM_SAVED_BUTTON_TPL = "xpath://h3[contains(text(),'{ArticleTitle}')]/../../a[contains(@class,'watched')]";
-        MY_ARTICLE_NAME_TPL = "xpath://h3[contains(text(),'{ArticleName}')]";
+        MY_ARTICLE_NAME_TPL = "xpath://h3[contains(text(),'{ArticleName}')]/../..";
     }
 }

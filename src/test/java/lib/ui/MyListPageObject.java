@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import lib.Platform;
+import lib.ui.factories.MyListPageObjectFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -33,6 +34,9 @@ abstract public class MyListPageObject extends MainPageObject {
     public WebElement findMyArticleByName(String name) {
         return waitElementPresentBy((getArticleByText(name)));
     }
+    public WebElement findMyArticleByElementsName(String name) {
+        return waitElementPresentBy((getArticleByText(name)));
+    }
 
     public void openMyArticle() {
         waitElementPresentBy((ARTICLE_ELEMENT)).click();
@@ -55,6 +59,16 @@ abstract public class MyListPageObject extends MainPageObject {
         }
         if (Platform.getInstance().isMW()){
             driver.navigate().refresh();
+        }
+    }
+    public void swipeBeforeArticleName(String name,int size) {
+        String articleXpath =getArticleByText(name);
+        if (Platform.getInstance().isAndroid()) {
+            swipeUpToFindElement((articleXpath), size);
+        } else if (Platform.getInstance().isIOs()) {
+            swipeUpElementAppear(articleXpath, size);
+        } else { //!isElementPresent(articleXpath)
+            scrollWebElementTillNotVisible(articleXpath, size);
         }
     }
 

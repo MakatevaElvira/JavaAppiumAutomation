@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import lib.Platform;
+import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -12,6 +13,7 @@ import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static java.time.Duration.ofMillis;
+import static lib.ui.MyListPageObject.getArticleByText;
 
 abstract public class ArticlePageObject extends MainPageObject {
     public ArticlePageObject(RemoteWebDriver driver) {
