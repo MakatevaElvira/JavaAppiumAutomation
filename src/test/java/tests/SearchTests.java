@@ -7,6 +7,7 @@ import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MainPageObjectFactory;
 import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
@@ -22,7 +23,7 @@ public class SearchTests extends CoreTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        MainPageObject = new MainPageObject(driver);
+        MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);
     }
     @Test

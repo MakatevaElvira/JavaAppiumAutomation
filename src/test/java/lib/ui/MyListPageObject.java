@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -13,6 +14,7 @@ abstract public class MyListPageObject extends MainPageObject {
     protected static String
             SAVED_TITLES ,
             ARTICLE_ELEMENT ,
+            REMOVED_FROM_SAVED_BUTTON_TPL,
             MY_ARTICLE_NAME_TPL ;
 
     public void openSaved() {
@@ -20,6 +22,7 @@ abstract public class MyListPageObject extends MainPageObject {
     }
 
     public void waiTMyArticlePresentByName(String name) {
+        //String locator = getArticleByText(name);
         waitElementPresentBy((getArticleByText(name)));
     }
 
@@ -34,14 +37,33 @@ abstract public class MyListPageObject extends MainPageObject {
     public void openMyArticle() {
         waitElementPresentBy((ARTICLE_ELEMENT)).click();
     }
+    public void openMyArticleByName(String name) {
+        waitElementPresentBy(getArticleByText(name)).click();
+    }
 
     public void swipeMyArticleToDelete(String name, int time) {
-        swipeUpElementToLeft(getArticleByText(name), time);
+        //waitElementPresentBy(name);
+        String articleXpath = getArticleByText(name);
+        if ((Platform.getInstance().isIOs()) || (Platform.getInstance().isAndroid())){
+            swipeUpElementToLeft(getArticleByText(name), time);
+        } else {
+            String removeLocator = getRemovedButtonByTitle(name);
+            waitElementPresentBy(removeLocator).click();
+        }
+        if (Platform.getInstance().isIOs()){
+            clickToElementsUpperCorner(articleXpath);
+        }
+        if (Platform.getInstance().isMW()){
+            driver.navigate().refresh();
+        }
     }
 
     /*TEMPLATES METHODS */
     public static String getArticleByText(String text) {
         return MY_ARTICLE_NAME_TPL.replace("{ArticleName}", text);
+    }
+    public static String getRemovedButtonByTitle(String text) {
+        return REMOVED_FROM_SAVED_BUTTON_TPL.replace("{ArticleTitle}", text);
     }
     /*TEMPLATES METHODS */
 }

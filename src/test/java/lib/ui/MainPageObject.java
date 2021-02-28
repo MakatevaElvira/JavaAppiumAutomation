@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import lib.Platform;
+import lib.ui.factories.MyListPageObjectFactory;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -16,17 +17,19 @@ import java.util.regex.Pattern;
 
 import static java.time.Duration.ofMillis;
 
-public class MainPageObject {
+abstract public class MainPageObject {
     protected RemoteWebDriver driver;
 
     public MainPageObject(RemoteWebDriver driver) {
         this.driver = driver;
     }
 
-    private static final String
-            MY_LIST = "xpath://android.widget.FrameLayout[@content-desc=\"My lists\"]",
-            SKIP = "xpath://*[contains(@text,'SKIP')]",
-            SEARCH_INPUT_FIELD = "xpath://*[contains(@text,'Search Wikipedia')]";
+    protected static String
+            MY_LIST,
+            SKIP,
+            OPEN_NAVIGATION,
+            SEARCH_INPUT_FIELD,
+            LOG_IN_BUTTON;
 
     public WebElement waitElementPresentBy(String locator) {
         By by = getLocatorByString(locator);
@@ -75,6 +78,18 @@ public class MainPageObject {
         return false;
     }
 
+    public int getAmountOfElements(String locator) {
+        By by = getLocatorByString(locator);
+        int size = driver.findElements(by).size();
+        System.out.println("Size = "+ size);
+        return driver.findElements(by).size();
+
+    }
+
+    public Boolean isElementPresent(String locator) {
+        return getAmountOfElements(locator) > 0;
+    }
+
     public void swipeUp(int timeOfSwipe) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -109,7 +124,7 @@ public class MainPageObject {
     }
 
     public void swipeUpElementToLeft(String by, int timeOfSwipe) {
-        if (driver instanceof AppiumDriver){
+        if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
             WebElement element = waitElementPresentBy(by);
             int leftX = (int) (element.getLocation().getX() * 0.1);
@@ -134,12 +149,12 @@ public class MainPageObject {
                 clickToElementsUpperCorner(by);
             }
         } else {
-            System.out.println("SwipeUpElementToLeft has not for platform= "+Platform.getInstance().getPlatformVar());
+            System.out.println("SwipeUpElementToLeft has not for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
 
     public void clickToElementsUpperCorner(String locator) {
-        if (driver instanceof AppiumDriver){
+        if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
             WebElement element = waitElementPresentBy(locator + "/..");
             int rightX = (element.getLocation().getX());//прибавили к левой точке ширину элемента и получили правую
@@ -152,7 +167,7 @@ public class MainPageObject {
             TouchAction action = new TouchAction(driver);
             action.tap(clickPoint).perform();
         } else {
-            System.out.println("ClickToElementsUpperCorner has not for platform= "+Platform.getInstance().getPlatformVar());
+            System.out.println("ClickToElementsUpperCorner has not for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
 
@@ -161,6 +176,9 @@ public class MainPageObject {
     }
 
     public void openMyList() {
+        if (Platform.getInstance().isMW()) {
+            tryClickElementWithFewAttempts(MY_LIST, 5);
+        }
         waitElementPresentBy(MY_LIST).click();
     }
 
@@ -200,39 +218,80 @@ public class MainPageObject {
 
     public Boolean isElementLocatedOnTheScreen(String locator) {
         int elementLocationByY = waitElementPresentBy(locator).getLocation().getY();
-        if (Platform.getInstance().isMW()){
+        if (Platform.getInstance().isMW()) {
             JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
-           Object jsResult = JSExecutor.executeScript("return window.pageYOffset");
-           elementLocationByY -= Integer.parseInt(jsResult.toString());
+            Object jsResult = JSExecutor.executeScript("return window.pageYOffset");
+            elementLocationByY -= Integer.parseInt(jsResult.toString());
         }
         int screenSizeByY = driver.manage().window().getSize().getHeight();//получить длину экрана
         return elementLocationByY < screenSizeByY;
     }
-    public void scrollWebPageUp(){
-        if (Platform.getInstance().isMW()){
+
+    public void scrollWebPageUp() {
+        if (Platform.getInstance().isMW()) {
             JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
             JSExecutor.executeScript("window.scrollBy(0,250)");
         } else {
-            System.out.println("Scroll not work for platform= "+Platform.getInstance().getPlatformVar());
+            System.out.println("Scroll not work for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-    public void scrollWebElementTillNotVisible(String locator,int maxSwipes){
+
+    public void scrollWebElementTillNotVisible(String locator, int maxSwipes) {
         int alreadySwipe = 0;
         WebElement element = waitElementPresentBy(locator);
-        while (!isElementLocatedOnTheScreen(locator)){
+        while (!isElementLocatedOnTheScreen(locator)) {
             scrollWebPageUp();
             ++alreadySwipe;
-            if (alreadySwipe > maxSwipes){
-                System.out.println("Element with locator= "+ locator+" is not LocatedOnTheScreen");
+            if (alreadySwipe > maxSwipes) {
+                System.out.println("Element with locator= " + locator + " is not LocatedOnTheScreen");
                 return;
             }
         }
-
-        if (Platform.getInstance().isMW()){
+        if (Platform.getInstance().isMW()) {
             JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
             JSExecutor.executeScript("window.scrollBy(0,250)");
         } else {
-            System.out.println("Scroll not work for platform= "+Platform.getInstance().getPlatformVar());
+            System.out.println("Scroll not work for platform= " + Platform.getInstance().getPlatformVar());
         }
+    }
+
+    public void openNavigation() {
+        if (Platform.getInstance().isMW()) {
+            waitElementPresentBy(OPEN_NAVIGATION).click();
+        } else {
+            System.out.println("Method openNavigation doesn't work for platform= " + Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void tryClickElementWithFewAttempts(String locator, int attemptsAmount) {
+        int alreadyAttempts = 0;
+        boolean needMoreAttempts = true;
+        while (needMoreAttempts) {
+            try {
+                waitElementPresentBy(locator).click();
+                needMoreAttempts = false;
+            } catch (Exception exception) {
+                if (alreadyAttempts > attemptsAmount) {
+                    waitElementPresentBy(locator).click();
+                }
+            }
+        }
+        ++alreadyAttempts;
+
+    }
+
+    public void openMySavedArticles() {
+        if (Platform.getInstance().isMW()) {
+            waitElementPresentBy(MY_LIST).click();
+
+        } else {
+            //Открыть мои статьи на гл экране
+            openMyList();
+            //Открыть Сохраненные
+            MyListPageObjectFactory.get(driver).openSaved();
+        }
+    }
+    public void clickLoginFromMainMenu(){
+        waitElementPresentBy(LOG_IN_BUTTON).click();
     }
 }

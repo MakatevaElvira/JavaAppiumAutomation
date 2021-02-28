@@ -2,14 +2,14 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.Platform;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.MyListPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MainPageObjectFactory;
 import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {
@@ -17,19 +17,37 @@ public class ArticleTests extends CoreTestCase {
     public SearchPageObject SearchPageObject;
     public ArticlePageObject ArticlePageObject;
     public MyListPageObject MyListPageObject;
+    public AuthorizationPageObject AuthorizationPageObject;
+    private static final String login = "ElviraMak";
+    private static final String password = "Makateva";
 
     protected void setUp() throws Exception {
         super.setUp();
-        MainPageObject = new MainPageObject(driver);
+        MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject = ArticlePageObjectFactory.get(driver);
         MyListPageObject = MyListPageObjectFactory.get(driver);
+        AuthorizationPageObject = new AuthorizationPageObject(driver);
+    }
+
+    @BeforeClass
+    public void loginForWeb(){
+        if (Platform.getInstance().isMW()){
+            AuthorizationPageObject.generalLogin(login,password);
+        } else {
+            System.out.println("No autorization for platform= "+Platform.getInstance().getPlatformVar());
+        }
     }
 
     @Test
     public void testTwoArticleSaving() throws InterruptedException {
         String toFind1 = "Appium";
         String toFind2 = "Mandarin";
+        if (Platform.getInstance().isMW()){
+          AuthorizationPageObject.generalLogin(login,password);
+        } else {
+            System.out.println("No autorization for platform= "+Platform.getInstance().getPlatformVar());
+        }
         //пропустить
         if (Platform.getInstance().isMW()){
             System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
@@ -43,44 +61,36 @@ public class ArticleTests extends CoreTestCase {
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind1);
 
-        if (Platform.getInstance().isMW()){
-            //добавить в избранное
-            ArticlePageObject.addToList();
-            //открыть поиск
-            SearchPageObject.initSearchInput();
-        }else {
-            //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-            ArticlePageObject.saveArticleToMyList();
-            //нажать ADD TO LIST + перейти на активную часть экрана
-            ArticlePageObject.continueAddToList();
-            // выйти из статьи ?
-            ArticlePageObject.exitFromArticle();
-        }
+        //добавить в избранное
+        ArticlePageObject.addToMyList();
+        //для моб веб авторизоваться
+       // new AuthorizationPageObject(driver).loginToWiki(login,password); //тут потом проблема!
+        //выйти из статьи
+        ArticlePageObject.closeArticle();
 
+        // выполнить новый поиск
+        //кликнуть поиск
+        SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
-        MainPageObject.waitElementPresentBy(("id:org.wikipedia.beta:id/search_src_text")).clear();
         SearchPageObject.typeSearchValue(toFind2);
         //открыть статью
         SearchPageObject.openArticleByTitle(toFind2);
-        if (Platform.getInstance().isMW()){
-            //добавить в избранное
-            ArticlePageObject.addToList();
-            //открыть поиск
-            SearchPageObject.initSearchInput();
-        }else {
-            //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
-            ArticlePageObject.saveArticleToMyList();
-            //нажать ADD TO LIST + перейти на активную часть экрана
-            ArticlePageObject.continueAddToList();
-            // выйти из статьи ?
-            ArticlePageObject.exitFromArticle();
-        }
+
+        //добавить в избранное
+        ArticlePageObject.addToMyList();
+        //для моб веб авторизоваться
+        //new AuthorizationPageObject(driver).loginToWiki(login,password);
+        //выйти из статьи
+        ArticlePageObject.closeArticle(); //
+
+        //перейти в воч лист
+        MainPageObject.openNavigation();//ля веба
         //обратно
-        SearchPageObject.returnToMainPage();
-        //Открыть мои статьи на гл экране
-        MainPageObject.openMyList();
-        //Открыть Сохраненные
-        MyListPageObject.openSaved();
+        SearchPageObject.returnToMainPage();// кроме веба
+
+        //ОТКРЫТЬ МОИ ИЗБРАННЫЕ СТАТЬИ:
+        MainPageObject.openMySavedArticles();
+
         //проверить наличие статьи
         MyListPageObject.waiTMyArticlePresentByName(toFind1);
         MyListPageObject.waiTMyArticlePresentByName(toFind2);
@@ -91,7 +101,7 @@ public class ArticleTests extends CoreTestCase {
         //Assert.assertTrue(driver.findElement(articleLocation1).getText().equals(toFind1));
         Assert.assertTrue(MyListPageObject.findMyArticleByName(toFind1).getText().equals(toFind1));
         //driver.findElement(By.id("org.wikipedia.beta:id/page_list_item_title")).click();
-        MyListPageObject.openMyArticle();
+        MyListPageObject.openMyArticleByName(toFind1);
         String afterSwipeTitle = ArticlePageObject.getArticleTitle(toFind1);
         Assert.assertEquals(toFind1, afterSwipeTitle);
     }

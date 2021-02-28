@@ -3,6 +3,7 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -67,7 +68,11 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void returnToMainPage() {
-        waitElementPresentBy((RETURN_TO_MAIN)).click();
+        if ((Platform.getInstance().isAndroid()) || Platform.getInstance().isIOs()){
+            waitElementPresentBy((RETURN_TO_MAIN)).click();
+        }else {
+            System.out.println("Method returnToMainPage has nothing for platform= "+Platform.getInstance().getPlatformVar());
+        }
     }
 
     public Boolean waitForElementByTitleAndDescriptionOld(String expectedTitle, String expectedDescription) {

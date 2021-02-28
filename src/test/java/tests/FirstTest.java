@@ -8,6 +8,7 @@ import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MainPageObjectFactory;
 import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
@@ -25,7 +26,7 @@ public class FirstTest extends CoreTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        MainPageObject = new MainPageObject(driver);
+        MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject = ArticlePageObjectFactory.get(driver);
         MyListPageObject =  MyListPageObjectFactory.get(driver);
@@ -114,6 +115,9 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testRotation() {
+        if (Platform.getInstance().isMW()){
+            return;
+        }
         String toFind = "How deep is your love";
         //пропустить
         MainPageObject.skipStartInformation();
@@ -157,6 +161,9 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testOfBackGround() {
+        if (Platform.getInstance().isMW()){
+            return;
+        }
         String toFind = "mandarin";
         //пропустить
         MainPageObject.skipStartInformation();

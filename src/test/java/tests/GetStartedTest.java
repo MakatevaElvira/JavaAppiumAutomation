@@ -5,24 +5,23 @@ import lib.Platform;
 import lib.iOSTestCase;
 import lib.ui.MainPageObject;
 import lib.ui.WelcomePageObject;
+import lib.ui.factories.MainPageObjectFactory;
 import lib.ui.factories.WelcomePgeObjectFactory;
 import org.junit.Test;
 
 public class GetStartedTest extends CoreTestCase {
     public WelcomePageObject WelcomePage;
     public MainPageObject MainPage;
-    //public Platform Platform;
 
     protected void setUp() throws Exception {
         super.setUp();
         WelcomePage = WelcomePgeObjectFactory.get(driver);
-        MainPage = new MainPageObject(driver);
-        //Platform = new Platform();
+        MainPage =  MainPageObjectFactory.get(driver);
     }
 
     @Test
     public void testPassThroughWelcome(){
-        if (Platform.getInstance().isAndroid()){
+        if ((Platform.getInstance().isAndroid()) || (Platform.getInstance().isMW())) {
             return;
         }
         WelcomePage.waitLearnMoreWikipediaLink();
@@ -37,7 +36,7 @@ public class GetStartedTest extends CoreTestCase {
     }
     @Test
     public void testFirstSearch() {
-        if (Platform.getInstance().isAndroid()){
+        if ((Platform.getInstance().isAndroid()) || (Platform.getInstance().isMW())){
             return;
         }
         System.out.println("Java+Appium=start test!!!");

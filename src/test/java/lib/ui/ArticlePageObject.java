@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import lib.Platform;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ScreenOrientation;
@@ -22,6 +23,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             ARTICLE_MENU_BOOKMARK,
             ARTICLE_TITLE,
             ADD_TO_LIST,
+            REMOVE_FROM_MY_LIST,
             TOUCH_OUTSIDE,
             NAVIGATE_UP;
 
@@ -78,7 +80,9 @@ abstract public class ArticlePageObject extends MainPageObject {
         waitElementPresentBy((ADD_TO_LIST)).click();
         waitElementPresentBy((TOUCH_OUTSIDE)).click();
     }
+
     public void addToList() {
+        //removeArticleFromMySaved();
         waitElementPresentBy((ADD_TO_LIST)).click();
     }
 
@@ -86,9 +90,37 @@ abstract public class ArticlePageObject extends MainPageObject {
         waitElementPresentBy((ADD_TO_LIST)).click();
         waitElementPresentBy((TOUCH_OUTSIDE)).click();
     }
+    public void removeArticleFromMySaved() {//доработать под iOS
+        if (isElementPresent(REMOVE_FROM_MY_LIST)){
+            waitElementPresentBy(REMOVE_FROM_MY_LIST).click();
+        }
+        waitElementPresentBy(ADD_TO_LIST);
+    }
 
     public void exitFromArticle() {
         waitElementPresentBy((NAVIGATE_UP)).click();
+    }
+    public void closeArticle(){
+        if (Platform.getInstance().isMW()){
+            //открыть поиск
+            System.out.println("Method closeArticle doesn't work for platform = "+Platform.getInstance().getPlatformVar());
+        } else {
+            // выйти из статьи ?
+            exitFromArticle();
+        }
+    }
+    public void addToMyList(){
+        if (Platform.getInstance().isMW()){
+            //далить если уже был добавлен
+            removeArticleFromMySaved();
+            //добавить в избранное
+            addToList();
+        }else {
+            //нажать SAVE org.wikipedia.beta:id/article_menu_bookmark
+            saveArticleToMyList();
+            //нажать ADD TO LIST + перейти на активную часть экрана
+            continueAddToList();
+        }
     }
 
 }
