@@ -89,7 +89,6 @@ public class SearchTests extends CoreTestCase {
     @Test
     public void testSearchResultsAssertion() throws InterruptedException {
         String toFind = "Mandarin";
-        String description = "Chinese";
         //пропустить
         if (Platform.getInstance().isMW()){
             System.out.println("No SKIP for platform= "+Platform.getInstance().getPlatformVar());
@@ -100,8 +99,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
-        //SearchPageObject.swipeUp(1500);
         //проверить результаты
-        SearchPageObject.searchCount();
+        Assert.assertTrue(SearchPageObject.searchCountNew(toFind) >2);
     }
 }

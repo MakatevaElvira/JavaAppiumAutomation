@@ -126,6 +126,11 @@ abstract public class SearchPageObject extends MainPageObject {
         return true;
     }
 
+    public  int searchCountNew(String text) {
+        List<WebElement> results = waitElementsPresentBy(getResultSearchTitleByText(text));
+        return results.size();
+
+    }
     public void searchCount() {
         List<WebElement> results = waitElementsPresentBy(("xpath://android.view.ViewGroup"));
         List<String> resultsTitles = new ArrayList<>();
