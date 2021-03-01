@@ -1,15 +1,15 @@
 -------------------------------------------------------------------------------
 Test set: tests.SearchTests
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 36.02 s <<< FAILURE! - in tests.SearchTests
-testFirstSearch(tests.SearchTests)  Time elapsed: 11.078 s  <<< ERROR!
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 31.261 s <<< FAILURE! - in tests.SearchTests
+testFirstSearch(tests.SearchTests)  Time elapsed: 11.946 s  <<< ERROR!
 org.openqa.selenium.TimeoutException: Expected condition failed: No element present by locator: xpath://*[contains(@text,'Search Wikipedia')] (tried for 5 second(s) with 500 milliseconds interval)
-	at tests.SearchTests.testFirstSearch(SearchTests.java:41)
+	at tests.SearchTests.testFirstSearch(SearchTests.java:45)
 Caused by: org.openqa.selenium.NoSuchElementException: 
 Cannot locate an element using By.xpath: //*[contains(@text,'Search Wikipedia')]
 For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
 Build info: version: '3.12.0', revision: '7c6e0b3', time: '2018-05-08T14:04:26.12Z'
 System info: host: 'DESKTOP-RMP8ETG', ip: '192.168.1.162', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_271'
 Driver info: driver.version: unknown
-	at tests.SearchTests.testFirstSearch(SearchTests.java:41)
+	at tests.SearchTests.testFirstSearch(SearchTests.java:45)
 

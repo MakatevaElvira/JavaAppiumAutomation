@@ -1,6 +1,6 @@
 package tests;
 
-import io.qameta.allure.Description;
+import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
@@ -17,8 +17,11 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
-
+@Epic("Tests for SEARCH!")
 public class SearchTests extends CoreTestCase {
     public MainPageObject MainPageObject;
     public SearchPageObject SearchPageObject;
@@ -28,9 +31,11 @@ public class SearchTests extends CoreTestCase {
         MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);
     }
-    /*@Test()
+    @Test()
+    @Features(value = {@Feature(value ="Main"),@Feature(value = "Search")})
     @DisplayName("First little search test")
     @Description("Тест который проверяет, что вообще что-то работает")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testFirstSearch() {
         System.out.println("Java+Appium=start test!!!");
         if (Platform.getInstance().isMW()){
@@ -41,10 +46,12 @@ public class SearchTests extends CoreTestCase {
         String searchText = MainPageObject.findSearchInputField().getText();
         System.out.println(searchText);
         System.out.println("Java+Appium=finish test!!!");
-    }*/
+    }
     @Test
+    @Features(value = {@Feature(value ="Main"),@Feature(value = "Search")})
     @DisplayName("Test to verify cancellation")
     @Description("Тест который проверяет работу Отмены поиска")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testOfSearchCancellation() {
         String toFind = "google";
         //пропустить
@@ -71,8 +78,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test()
+    @Features(value = {@Feature(value ="Main"),@Feature(value = "Search")})
     @DisplayName("Search test to check result")
     @Description("Тест который проверяет, что в списке результатов искомые статьи")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testSearchResultChecking() {
         String toFind = "Google";
         //пропустить
@@ -96,8 +105,10 @@ public class SearchTests extends CoreTestCase {
         }
     }
     @Test
+    @Features(value = {@Feature(value = "Search")})
     @DisplayName("Search test to check result count")
     @Description("Тест который проверяет, что в списке резкльтатов есть как минимум 3 значения")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testSearchResultsAssertion() throws InterruptedException {
         String toFind = "Mandarin";
         //пропустить
@@ -110,7 +121,9 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.initSearchInput();
         //в нов поле ввода ввести Значение
         SearchPageObject.typeSearchValue(toFind);
+        //SearchPageObject.takeScreenShot("Search results page");
         //проверить результаты
         Assert.assertTrue(SearchPageObject.searchCountNew(toFind) >2);
     }
+
 }

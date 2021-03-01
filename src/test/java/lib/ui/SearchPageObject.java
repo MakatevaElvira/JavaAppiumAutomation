@@ -43,6 +43,7 @@ abstract public class SearchPageObject extends MainPageObject {
     @Step("Ввести значение поиска")
     public void typeSearchValue(String toFind) {
         waitElementPresentBy((SEARCH_INPUT)).sendKeys(toFind);
+        screenshot(takeScreenShot("searchResultPage"));
        // driver.getKeyboard().sendKeys(Keys.ENTER);//проблема!!!
       //  driver.pressKeyCode(new KeyEvent(AndroidKey.ENTER));
 
