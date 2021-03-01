@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import io.qameta.allure.Step;
 import lib.Platform;
 import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
@@ -28,7 +29,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             REMOVE_FROM_MY_LIST,
             TOUCH_OUTSIDE,
             NAVIGATE_UP;
-
+    @Step("Получить название статьи")
     public String getArticleTitle(String title) {
         if (Platform.getInstance().isAndroid()) {
             return waitElementPresentBy("xpath://android.view.View[@text='" + title + "']").getText();
@@ -42,11 +43,12 @@ abstract public class ArticlePageObject extends MainPageObject {
     public String getArticleTitleOld(String title) {
         return waitElementPresentBy("xpath://android.view.View[@text='" + title + "']").getText();
     }
-
+    @Step("Получить текст заголовка")
     public String getTitleText() {
         return waitElementPresentBy("xpath://android.view.View").getAttribute("text");
     }
 
+    @Step("Пролистать до элемента")
     public void swipeToViewElement(int size) {
         if (Platform.getInstance().isAndroid()) {
             swipeUpToFindElement((VIEW_ELEMENT), size);
@@ -56,7 +58,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             scrollWebElementTillNotVisible(VIEW_ELEMENT, size);
         }
     }
-
+    @Step("Свайпнуть вниз")
     public void swipeUp(int timeOfSwipe) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -73,32 +75,33 @@ abstract public class ArticlePageObject extends MainPageObject {
             System.out.println("SwipeUp has not for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-
+    @Step("Добавить статью в избранное")
     public void saveArticleToMyList() {
         waitElementPresentBy(ARTICLE_MENU_BOOKMARK).click();
     }
-
+    @Step("Подтвердить добавление в избранное")
     public void continueAddToList() {
         waitElementPresentBy((ADD_TO_LIST)).click();
         waitElementPresentBy((TOUCH_OUTSIDE)).click();
     }
-
+    @Step("Добавить статью в свой список")
     public void addToList() {
         //removeArticleFromMySaved();
         waitElementPresentBy((ADD_TO_LIST)).click();
     }
-
+    @Step("Добавить статью в сохраненные")
     public void addArticleToMySaved() {//доработать под iOS
         waitElementPresentBy((ADD_TO_LIST)).click();
         waitElementPresentBy((TOUCH_OUTSIDE)).click();
     }
+    @Step("Удалить статью из избранного")
     public void removeArticleFromMySaved() {//доработать под iOS
         if (isElementPresent(REMOVE_FROM_MY_LIST)){
             waitElementPresentBy(REMOVE_FROM_MY_LIST).click();
         }
         waitElementPresentBy(ADD_TO_LIST);
     }
-
+    @Step("Выйти из статьи")
     public void exitFromArticle() {
         waitElementPresentBy((NAVIGATE_UP)).click();
     }
@@ -111,6 +114,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             exitFromArticle();
         }
     }
+    @Step("Добавить статью комплексно для любой платформы")
     public void addToMyList(){
         if (Platform.getInstance().isMW()){
             //далить если уже был добавлен

@@ -13,7 +13,7 @@ public class GetStartedTest extends CoreTestCase {
     public WelcomePageObject WelcomePage;
     public MainPageObject MainPage;
 
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         WelcomePage = WelcomePgeObjectFactory.get(driver);
         MainPage =  MainPageObjectFactory.get(driver);

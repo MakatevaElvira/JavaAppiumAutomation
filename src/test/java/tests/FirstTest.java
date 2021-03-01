@@ -24,7 +24,7 @@ public class FirstTest extends CoreTestCase {
     public ArticlePageObject ArticlePageObject;
     public MyListPageObject MyListPageObject;
 
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);

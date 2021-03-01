@@ -20,7 +20,7 @@ public class ArticleTests extends CoreTestCase {
     private static final String login = "ElviraMak";
     private static final String password = "Makateva";
 
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -29,14 +29,14 @@ public class ArticleTests extends CoreTestCase {
         AuthorizationPageObject = new AuthorizationPageObject(driver);
     }
 
-    @BeforeClass()
+    /*@BeforeClass()
     public void loginForWeb(){
         if (Platform.getInstance().isMW()){
             AuthorizationPageObject.generalLogin(login,password);
         } else {
             System.out.println("No autorization for platform= "+Platform.getInstance().getPlatformVar());
         }
-    }
+    }*/
 
     @Test
     public void testTwoArticleSaving() throws InterruptedException {

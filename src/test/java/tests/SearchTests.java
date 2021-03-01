@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.ArticlePageObject;
@@ -21,12 +23,14 @@ public class SearchTests extends CoreTestCase {
     public MainPageObject MainPageObject;
     public SearchPageObject SearchPageObject;
 
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         MainPageObject =  MainPageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);
     }
-    @Test
+    /*@Test()
+    @DisplayName("First little search test")
+    @Description("Тест который проверяет, что вообще что-то работает")
     public void testFirstSearch() {
         System.out.println("Java+Appium=start test!!!");
         if (Platform.getInstance().isMW()){
@@ -37,8 +41,10 @@ public class SearchTests extends CoreTestCase {
         String searchText = MainPageObject.findSearchInputField().getText();
         System.out.println(searchText);
         System.out.println("Java+Appium=finish test!!!");
-    }
+    }*/
     @Test
+    @DisplayName("Test to verify cancellation")
+    @Description("Тест который проверяет работу Отмены поиска")
     public void testOfSearchCancellation() {
         String toFind = "google";
         //пропустить
@@ -64,7 +70,9 @@ public class SearchTests extends CoreTestCase {
 
     }
 
-    @Test
+    @Test()
+    @DisplayName("Search test to check result")
+    @Description("Тест который проверяет, что в списке результатов искомые статьи")
     public void testSearchResultChecking() {
         String toFind = "Google";
         //пропустить
@@ -80,13 +88,16 @@ public class SearchTests extends CoreTestCase {
         // MainPageObject.waitElementPresentBy(By.id("org.wikipedia.beta:id/search_src_text")).sendKeys(toFind);
         SearchPageObject.typeSearchValue(toFind);
         // проверить результат assert
-        List<WebElement> results = driver.findElements(By.id("org.wikipedia.beta:id/page_list_item_title"));
+        //List<WebElement> results = driver.findElements(By.id("org.wikipedia.beta:id/page_list_item_title"));
+        List<WebElement> results =SearchPageObject.getSearchResultsList(toFind);
         for (WebElement result : results) {
             System.out.println("Result= " + result.getText());
             Assert.assertTrue(result.getText().contains(toFind));
         }
     }
     @Test
+    @DisplayName("Search test to check result count")
+    @Description("Тест который проверяет, что в списке резкльтатов есть как минимум 3 значения")
     public void testSearchResultsAssertion() throws InterruptedException {
         String toFind = "Mandarin";
         //пропустить

@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import io.qameta.allure.Step;
 import lib.Platform;
 import lib.ui.factories.MyListPageObjectFactory;
 import org.junit.Assert;
@@ -30,7 +31,7 @@ abstract public class MainPageObject {
             OPEN_NAVIGATION,
             SEARCH_INPUT_FIELD,
             LOG_IN_BUTTON;
-
+    @Step("Дождаться отображения элемента")
     public WebElement waitElementPresentBy(String locator) {
         By by = getLocatorByString(locator);
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
@@ -50,7 +51,7 @@ abstract public class MainPageObject {
         return false;
 
     }
-
+    @Step("Дождаться отображения списка элементов")
     public List<WebElement> waitElementsPresentBy(String locator) {
         By by = getLocatorByString(locator);
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
@@ -58,14 +59,14 @@ abstract public class MainPageObject {
         return webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 
     }
-
+    @Step("Пождать что элемента нет")
     public Boolean waitElementNotPresentBy(String locator) {
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
         webDriverWait.withMessage("No element present by locator: " + locator);
         return webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(getLocatorByString(locator)));
 
     }
-
+    @Step("Проверить что элемент имеет искомый текст")
     public boolean assertElementHasText(String locator, String expectedText, String errorMessage) {
         String gettingText = waitElementPresentBy(locator).getAttribute("name");
         System.out.println("expected= " + expectedText);
@@ -77,7 +78,7 @@ abstract public class MainPageObject {
         ;
         return false;
     }
-
+    @Step("Получить список элементов по локатору")
     public int getAmountOfElements(String locator) {
         By by = getLocatorByString(locator);
         int size = driver.findElements(by).size();
@@ -85,14 +86,14 @@ abstract public class MainPageObject {
         return driver.findElements(by).size();
 
     }
-
+    @Step("Проверить отображение элемента")
     public Boolean isElementPresent(String locator) {
         return getAmountOfElements(locator) > 0;
     }
     public Boolean isElementVisible(String locator) {
         return getAmountOfElements(locator) > 0;
     }
-
+    @Step("Свайпнуть")
     public void swipeUp(int timeOfSwipe) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -109,7 +110,7 @@ abstract public class MainPageObject {
             System.out.println("SwipeUp has not for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-
+    @Step("Свайпнуть")
     public void swipeQuick() {
         swipeUp(200);
     }
@@ -125,7 +126,7 @@ abstract public class MainPageObject {
             ++alreadySwipe;
         }
     }
-
+    @Step("Свайпнуть влево")
     public void swipeUpElementToLeft(String by, int timeOfSwipe) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -155,7 +156,7 @@ abstract public class MainPageObject {
             System.out.println("SwipeUpElementToLeft has not for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-
+    @Step("ДКликнуть в верхний угол элемента")
     public void clickToElementsUpperCorner(String locator) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -177,14 +178,14 @@ abstract public class MainPageObject {
     public String findElementAndGetAttribute(String locator, String attribute) {
         return waitElementPresentBy(locator).getAttribute(attribute);
     }
-
+    @Step("Открыть мио избранные")
     public void openMyList() {
         if (Platform.getInstance().isMW()) {
             tryClickElementWithFewAttempts(MY_LIST, 5);
         }
         waitElementPresentBy(MY_LIST).click();
     }
-
+    @Step("Получить локатор элемента по тексту")
     public By getLocatorByString(String locatorWithType) {
         String[] explodedLocator = locatorWithType.split(Pattern.quote(":"), 2);
         String byType = explodedLocator[0];
@@ -199,11 +200,11 @@ abstract public class MainPageObject {
             throw new IllegalArgumentException("Can`t find locatorWithType= " + locatorWithType);
         }
     }
-
+    @Step("Пропустить стартовую иформацию")
     public void skipStartInformation() {
         waitElementPresentBy(SKIP).click();
     }
-
+    @Step("найти поле для ввода текста поиска")
     public WebElement findSearchInputField() {
         return waitElementPresentBy(SEARCH_INPUT_FIELD);
     }
@@ -218,7 +219,7 @@ abstract public class MainPageObject {
             ++alreadySwiped;
         }
     }
-
+    @Step("Проверить что элемент есть на странице")
     public Boolean isElementLocatedOnTheScreen(String locator) {
         int elementLocationByY = waitElementPresentBy(locator).getLocation().getY();
         if (Platform.getInstance().isMW()) {
@@ -229,7 +230,7 @@ abstract public class MainPageObject {
         int screenSizeByY = driver.manage().window().getSize().getHeight();//получить длину экрана
         return elementLocationByY < screenSizeByY;
     }
-
+    @Step("Проскроллить веб страницу")
     public void scrollWebPageUp() {
         if (Platform.getInstance().isMW()) {
             JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
@@ -238,7 +239,7 @@ abstract public class MainPageObject {
             System.out.println("Scroll not work for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-
+    @Step("Проскроллить до отображения элемента")
     public void scrollWebElementTillNotVisible(String locator, int maxSwipes) {
         int alreadySwipe = 0;
         WebElement element = waitElementPresentBy(locator);
@@ -259,7 +260,7 @@ abstract public class MainPageObject {
             System.out.println("Scroll not work for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-
+    @Step("Открыть главное меню")
     public void openNavigation() {
         if (Platform.getInstance().isMW()) {
             waitElementPresentBy(OPEN_NAVIGATION).click();
@@ -267,7 +268,7 @@ abstract public class MainPageObject {
             System.out.println("Method openNavigation doesn't work for platform= " + Platform.getInstance().getPlatformVar());
         }
     }
-
+    @Step("Выполнить попытки клика по элементу")
     public void tryClickElementWithFewAttempts(String locator, int attemptsAmount) {
         int alreadyAttempts = 0;
         boolean needMoreAttempts = true;
@@ -284,7 +285,7 @@ abstract public class MainPageObject {
         ++alreadyAttempts;
 
     }
-
+    @Step("Открыть мио сохраненные статьи")
     public void openMySavedArticles() {
         if (Platform.getInstance().isMW()) {
             waitElementPresentBy(MY_LIST).click();
@@ -296,6 +297,7 @@ abstract public class MainPageObject {
             MyListPageObjectFactory.get(driver).openSaved();
         }
     }
+    @Step("Кликнуть элемент Логина")
     public void clickLoginFromMainMenu(){
         waitElementPresentBy(LOG_IN_BUTTON).click();
     }
